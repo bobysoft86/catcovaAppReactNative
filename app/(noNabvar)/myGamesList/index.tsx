@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   View,
   Text,
@@ -11,9 +11,14 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 import { styles, GREEN, MUTED } from "./styles";
+import { OwnedGame } from "@/src/models/game-model";
+import { myOwnedGamesList } from "@/src/api/ownedGames";
+import { getMyWishedGames } from "@/src/api/wishedGame";
+import { RentalModel } from "@/src/models/rental";
+import { WishedGameModel } from "@/src/models/wishedGameModel";
 
 type Mode = "owned" | "wishlist";
-type Status = "available" | "loaned" | "soon" | "collectors" | "expansion";
+type Status = "available" | "rented" | "booked" | "pending";
 
 const { screen, headerRow, iconBtn } = styles;
 
@@ -38,139 +43,170 @@ export default function MyGamesScreen() {
 
   const [mode, setMode] = useState<Mode>("owned");
   const [query, setQuery] = useState("");
+  const [ownedGames, setOwnedGames] = useState<OwnedGame[]>()
+  const [wishedGames, setwishedGames] = useState<WishedGameModel[]>()
 
   const isOwned = mode === "owned";
 
   // Mock visual (lo cambias luego por API: ownedGames / wishlistGames)
-  const ownedGames = useMemo<MyGameCard[]>(
-    () => [
-      {
-        id: "1",
-        title: "Catan",
-        image:
-          "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1200&q=60",
-        playersText: "3-4 Jugadores",
-        durationText: "60-90 min",
-        tagLabel: "DISPONIBLE",
-        tagVariant: "available",
-        location: "Estantería A",
-      },
-      {
-        id: "2",
-        title: "Wingspan",
-        image:
-          "https://images.unsplash.com/photo-1520975958225-6b0f74b4b2b0?auto=format&fit=crop&w=1200&q=60",
-        playersText: "1-5 Jugadores",
-        durationText: "40-70 min",
-        tagLabel: "PRESTADO",
-        tagVariant: "loaned",
-        lender: "María G.",
-      },
-      {
-        id: "3",
-        title: "Ticket to Ride",
-        image:
-          "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=60",
-        playersText: "2-5 Jugadores",
-        durationText: "30-60 min",
-        tagLabel: "DISPONIBLE",
-        tagVariant: "available",
-        location: "Armario Salón",
-      },
-      {
-        id: "4",
-        title: "Scythe",
-        image:
-          "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=60",
-        playersText: "1-5 Jugadores",
-        durationText: "115 min",
-        tagLabel: "ED. COLECCIONISTA",
-        tagVariant: "collectors",
-        location: "Caja grande",
-      },
-    ],
-    []
-  );
+  // const ownedGames = useMemo<MyGameCard[]>(
+  //   () => [
+  //     {
+  //       id: "1",
+  //       title: "Catan",
+  //       image:
+  //         "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1200&q=60",
+  //       playersText: "3-4 Jugadores",
+  //       durationText: "60-90 min",
+  //       tagLabel: "DISPONIBLE",
+  //       tagVariant: "available",
+  //       location: "Estantería A",
+  //     },
+  //     {
+  //       id: "2",
+  //       title: "Wingspan",
+  //       image:
+  //         "https://images.unsplash.com/photo-1520975958225-6b0f74b4b2b0?auto=format&fit=crop&w=1200&q=60",
+  //       playersText: "1-5 Jugadores",
+  //       durationText: "40-70 min",
+  //       tagLabel: "PRESTADO",
+  //       tagVariant: "loaned",
+  //       lender: "María G.",
+  //     },
+  //     {
+  //       id: "3",
+  //       title: "Ticket to Ride",
+  //       image:
+  //         "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=60",
+  //       playersText: "2-5 Jugadores",
+  //       durationText: "30-60 min",
+  //       tagLabel: "DISPONIBLE",
+  //       tagVariant: "available",
+  //       location: "Armario Salón",
+  //     },
+  //     {
+  //       id: "4",
+  //       title: "Scythe",
+  //       image:
+  //         "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=60",
+  //       playersText: "1-5 Jugadores",
+  //       durationText: "115 min",
+  //       tagLabel: "ED. COLECCIONISTA",
+  //       tagVariant: "collectors",
+  //       location: "Caja grande",
+  //     },
+  //   ],
+  //   []
+  // );
 
-  const wishlistData = useMemo<MyGameCard[]>(
-    () => [
-      {
-        id: "w1",
-        title: "Wingspan Asia",
-        image:
-          "https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=1200&q=60",
-        playersText: "1-2 Jugadores",
-        durationText: "45 min",
-        tagLabel: "CAMBIO DISPONIBLE",
-        tagVariant: "available",
-        priceText: "45€",
-      },
-      {
-        id: "w2",
-        title: "Ticket to Ride: Legacy",
-        image:
-          "https://images.unsplash.com/photo-1520975958225-6b0f74b4b2b0?auto=format&fit=crop&w=1200&q=60",
-        playersText: "2-5 Jugadores",
-        durationText: "60-90 min",
-        tagLabel: "PRÓXIMAMENTE",
-        tagVariant: "soon",
-        releaseText: "NOV 2024",
-      },
-      {
-        id: "w3",
-        title: "Catan: Starfarers",
-        image:
-          "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1200&q=60",
-        playersText: "3-4 Jugadores",
-        durationText: "90 min",
-        tagLabel: "DISPONIBLE",
-        tagVariant: "available",
-        priceText: "89€",
-      },
-      {
-        id: "w4",
-        title: "Scythe: Fenris",
-        image:
-          "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=60",
-        playersText: "1-7 Jugadores",
-        durationText: "45€",
-        tagLabel: "EXPANSIÓN",
-        tagVariant: "expansion",
-        priceText: "45€",
-      },
-    ],
-    []
-  );
 
-  const raw = isOwned ? ownedGames : wishlistData;
+  useEffect(() => {
+
+    const fetchOwnedGamesData = async () => {
+      try {
+        const OwnedGamesData = await myOwnedGamesList()
+        console.log(OwnedGamesData)
+        setOwnedGames(OwnedGamesData)
+      } catch (error) {
+
+      }
+    }
+    fetchOwnedGamesData();
+  }, []);
+
+
+  useEffect(() => {
+
+    const fetchWishedGamesData = async () => {
+      try {
+        const WishedGamesData = await getMyWishedGames()
+        setwishedGames(WishedGamesData)
+      } catch (error) {
+
+      }
+    }
+    fetchWishedGamesData();
+  }, []);
+
+  // const wishlistData = useMemo<MyGameCard[]>(
+  //   () => [
+  //     {
+  //       id: "w1",
+  //       title: "Wingspan Asia",
+  //       image:
+  //         "https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=1200&q=60",
+  //       playersText: "1-2 Jugadores",
+  //       durationText: "45 min",
+  //       tagLabel: "CAMBIO DISPONIBLE",
+  //       tagVariant: "available",
+  //       priceText: "45€",
+  //     },
+  //     {
+  //       id: "w2",
+  //       title: "Ticket to Ride: Legacy",
+  //       image:
+  //         "https://images.unsplash.com/photo-1520975958225-6b0f74b4b2b0?auto=format&fit=crop&w=1200&q=60",
+  //       playersText: "2-5 Jugadores",
+  //       durationText: "60-90 min",
+  //       tagLabel: "PRÓXIMAMENTE",
+  //       tagVariant: "soon",
+  //       releaseText: "NOV 2024",
+  //     },
+  //     {
+  //       id: "w3",
+  //       title: "Catan: Starfarers",
+  //       image:
+  //         "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1200&q=60",
+  //       playersText: "3-4 Jugadores",
+  //       durationText: "90 min",
+  //       tagLabel: "DISPONIBLE",
+  //       tagVariant: "available",
+  //       priceText: "89€",
+  //     },
+  //     {
+  //       id: "w4",
+  //       title: "Scythe: Fenris",
+  //       image:
+  //         "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=60",
+  //       playersText: "1-7 Jugadores",
+  //       durationText: "45€",
+  //       tagLabel: "EXPANSIÓN",
+  //       tagVariant: "expansion",
+  //       priceText: "45€",
+  //     },
+  //   ],
+  //   []
+  // );
+
+  const raw = isOwned ? ownedGames : wishedGames;
 
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return raw;
-    return raw.filter((g) => g.title.toLowerCase().includes(q));
+    return raw?.filter((g) => g.gameBdd?.translations[0].name.toLowerCase().includes(q));
   }, [raw, query]);
 
   // stats simples (luego con API real)
   const stats = useMemo(() => {
     if (isOwned) {
-      const total = ownedGames.length;
-      const loaned = ownedGames.filter((x) => x.tagVariant === "loaned").length;
+      const total = ownedGames?.length;
+      const loaned = checkGameStatus(ownedGames)
       return { aLabel: "TOTAL", aValue: String(total), bLabel: "PRESTADOS", bValue: String(loaned) };
     }
-    const total = wishlistData.length;
-    const tradable = wishlistData.filter((x) => x.tagLabel.includes("CAMBIO")).length;
+    const total = wishedGames?.length;
+    const tradable = wishedGames?.length;
     return { aLabel: "TOTAL DESEADOS", aValue: String(total), bLabel: "CAMBIO DISPONIBLE", bValue: String(tradable) };
-  }, [isOwned, ownedGames, wishlistData]);
+  }, [isOwned, ownedGames, wishedGames]);
 
   return (
     <View style={[screen, { paddingTop: insets.top + 8 }]}>
       {/* Header */}
       <View style={headerRow}>
-            <Pressable onPress={() => router.back()} style={iconBtn} hitSlop={10}>
-               <Text style={styles.iconText}>←</Text>
-             </Pressable>
-       
+        <Pressable onPress={() => router.back()} style={iconBtn} hitSlop={10}>
+          <Text style={styles.iconText}>←</Text>
+        </Pressable>
+
         <Text style={styles.h1}>Mis Juegos</Text>
 
         <Pressable
@@ -246,7 +282,7 @@ export default function MyGamesScreen() {
       {/* List */}
       <FlatList
         data={filtered}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => String(item.id)}
         contentContainerStyle={styles.list}
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => (
@@ -256,7 +292,7 @@ export default function MyGamesScreen() {
             onPrimary={() => {
               if (mode === "owned") {
                 // ejemplo: prestar
-                console.log("Prestar", item.id);
+                console.log("Detalle", item.id);
               } else {
                 console.log("Añadir tengo / Avisar", item.id);
               }
@@ -279,35 +315,36 @@ function GameRowCard({
   onPrimary,
   onSecondary,
 }: {
-  item: MyGameCard;
+  item: OwnedGame;
   mode: Mode;
   onPrimary: () => void;
   onSecondary: () => void;
 }) {
-  const tagStyle =
-    item.tagVariant === "available"
-      ? styles.tagGreen
-      : item.tagVariant === "loaned"
-      ? styles.tagYellow
-      : item.tagVariant === "soon"
-      ? styles.tagAmber
-      : item.tagVariant === "expansion"
-      ? styles.tagBlue
-      : styles.tagPurple;
+  const tagStyle = checkTagVariant(item);
+  
+  // item.tagVariant === "available"
+    //   ? styles.tagGreen
+    //   : item.tagVariant === "loaned"
+    //     ? styles.tagYellow
+    //     : item.tagVariant === "booked"
+    //       ? styles.tagAmber
+    //       : item.tagVariant === "expansion"
+    //         ? styles.tagBlue
+    //         : styles.tagPurple;
 
   const primaryLabel =
     mode === "owned"
-      ? "Prestar"
+      ? "Detalle"
       : item.tagVariant === "soon"
-      ? "Avisar"
-      : "Añadir a Tengo";
+        ? "Avisar"
+        : "Añadir a Tengo";
 
-  const showSecondary = mode === "owned" || item.tagVariant === "available";
+  const showSecondary = mode === "owned" || checkTagVariant(item) === styles.tagGreen;
 
   return (
     <View style={styles.card}>
       <ImageBackground
-        source={{ uri: item.image }}
+        source={{ uri: item?.gameBdd?.image || "" }}
         style={styles.cardHero}
         imageStyle={styles.cardHeroImg}
       >
@@ -316,28 +353,28 @@ function GameRowCard({
           style={styles.cardOverlay}
         >
           <View style={[styles.tag, tagStyle]}>
-            <Text style={styles.tagText}>{item.tagLabel}</Text>
+            <Text style={styles.tagText}>{"check Rented"}</Text>
           </View>
         </LinearGradient>
       </ImageBackground>
 
       <View style={styles.cardBody}>
         <Text style={styles.cardTitle} numberOfLines={1}>
-          {item.title}
+          {item.gameBdd?.translations[0].name}
         </Text>
 
         <View style={styles.metaRow}>
-          <Text style={styles.metaText}>👥 {item.playersText}</Text>
+          <Text style={styles.metaText}>👥  {item.gameBdd?.minPlayers} - {item.gameBdd?.maxPlayers}</Text>
           <Text style={styles.metaDot}>•</Text>
-          <Text style={styles.metaText}>⏱ {item.durationText}</Text>
+          <Text style={styles.metaText}>⏱ {item.gameBdd?.playTime}</Text>
         </View>
 
         {mode === "owned" ? (
           <View style={styles.subRow}>
             {item.location ? (
-              <Text style={styles.subText}>UBICACIÓN{"\n"}{item.location}</Text>
+              <Text style={styles.subText}>UBICACIÓN{"\n"}{item.location.name}</Text>
             ) : (
-              <Text style={styles.subText}>TIENE{"\n"}{item.lender ?? "-"}</Text>
+              <Text style={styles.subText}>TIENE{"\n"}{  "-"}</Text>
             )}
 
             <Pressable onPress={onPrimary} style={styles.primaryBtn}>
@@ -347,7 +384,7 @@ function GameRowCard({
         ) : (
           <View style={styles.subRow}>
             <Text style={styles.subText}>
-              {item.priceText ? `${item.priceText}` : item.releaseText ?? ""}
+              {item.value ? `${item.value}` : item.value ?? "?????????"}
             </Text>
 
             <Pressable onPress={onPrimary} style={styles.primaryBtnAlt}>
@@ -365,3 +402,21 @@ function GameRowCard({
     </View>
   );
 }
+
+function checkGameStatus(ownedGames: OwnedGame[] | undefined) {
+  let result = ownedGames?.filter((x: OwnedGame) => x?.rentals?.find((x: RentalModel) => x.rentalStatusId === 1)).length ?? 0;
+  console.log(result)
+  return result
+
+}
+
+function checkTagVariant(item: OwnedGame) {
+  let checkRental = item.rentals
+  if (checkRental) {
+    if (checkRental.find((x: RentalModel) => x.rentalStatusId === 1)) return styles.tagYellow
+    if (checkRental.find((x: RentalModel) => x.rentalStatusId === 2)) return styles.tagAmber
+    if (checkRental.find((x: RentalModel) => x.rentalStatusId === 4)) return  styles.tagBlue
+  }
+  return styles.tagGreen
+}
+

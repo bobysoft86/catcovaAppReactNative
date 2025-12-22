@@ -2,6 +2,8 @@
 // === ENUMS BACKEND ===
 
 import { User } from "../api/auth";
+import { OrganizationModel } from "./organization-model";
+import { RentalModel } from "./rental";
 
 export enum Lang {
   en = 'en',
@@ -123,10 +125,13 @@ export interface OwnedGame {
   status?: GameStatus;
   code?: string;
   locationId?: number | null;
+  location?:OrganizationModel;
   value?: number;
-  isActiveToRent: boolean;
-  maxRentTime: number;
-  isActiveToChange: boolean;
+
+  rentals?: RentalModel[];
+  isActiveToRent?: boolean;
+  maxRentTime?: number;
+  isActiveToChange?: boolean;
   createdAt: string;
   updatedAt: string;
 }
@@ -162,7 +167,7 @@ export interface GameBdd {
   minAge: number;
   suggestedAge: number;
   yearPublished: number;
-
+  rating?:number
   // si finalmente has movido thumbnail/image al GameBdd:
   thumbnail?: string | null;
   image?: string | null;

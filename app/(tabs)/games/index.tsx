@@ -14,7 +14,7 @@ type UiGame = {
   categoryColor: string;
   rating: number;
   cover: string;
-  status: "available" | "back";
+  status:boolean;
   backText?: string;
 };
 
@@ -68,7 +68,14 @@ export default function GamesScreen() {
       return "rgba(148,163,184,0.16)";
     };
 
-    return (gamesList || []).map((g: any) => {
+
+    const checkStatus = (g:GameBdd) => {
+    
+      if (!g?.ownedGame?.length ) return false
+      return true
+    }
+
+    return (gamesList || []).map((g: GameBdd) => {
       const category = pickCategory(g);
       const cover = g.image || g.thumbnail || "";
 
@@ -81,7 +88,7 @@ export default function GamesScreen() {
         rating: typeof g.rating === "number" ? g.rating : 0,
         cover,
         // si tu backend no trae disponibilidad, por ahora lo marcamos available
-        status: "available",
+        status: checkStatus(g) ,
         backText: undefined,
       };
     });
@@ -205,11 +212,11 @@ function GameCard({ game, onPress }: { game: UiGame; onPress: () => void }) {
             <View
               style={[
                 styles.dot,
-                { backgroundColor: game.status === "available" ? GREEN : "rgba(234,242,238,0.35)" },
+                { backgroundColor: game.status === true ? GREEN : "rgba(234,242,238,0.35)" },
               ]}
             />
             <Text style={styles.statusText}>
-              {game.status === "available" ? "Available" : game.backText ?? "Back soon"}
+              {game.status === true ? "Available" : game.backText ?? "Back soon"}
             </Text>
           </View>
         </LinearGradient>

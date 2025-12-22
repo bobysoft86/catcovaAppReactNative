@@ -15,7 +15,6 @@ export default function CustomTabBar({
   navigation,
 }: BottomTabBarProps) {
   const insets = useSafeAreaInsets();
-  console.log("CustomTabBar state:", state);
   return (
     <View style={[styles.root, { paddingBottom: Math.max(insets.bottom, 10) }]} pointerEvents="box-none">
       <View style={styles.pill} pointerEvents="auto">

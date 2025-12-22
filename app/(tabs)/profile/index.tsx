@@ -185,6 +185,66 @@ export default function ProfileScreen() {
           <Text style={styles.chev}>›</Text>
         </Pressable>
 
+           <Pressable onPress={() => router.push("/(noNabvar)/players/create") }style={styles.settingsCard}>
+          <View style={styles.settingsLeft}>
+            <View style={styles.settingsIcon}>
+            </View>
+            <View>
+              <Text style={styles.settingsTitle}>Crear Jugador</Text>
+            </View>
+          </View>
+          <Text style={styles.chev}>›</Text>
+        </Pressable>
+
+          <Pressable onPress={() => router.push("/(noNabvar)/organization/create") }style={styles.settingsCard}>
+          <View style={styles.settingsLeft}>
+            <View style={styles.settingsIcon}>
+            </View>
+            <View>
+              <Text style={styles.settingsTitle}>Crear Organizacion</Text>
+            </View>
+          </View>
+          <Text style={styles.chev}>›</Text>
+        </Pressable>
+
+
+
+          <Pressable onPress={() => router.push("/(noNabvar)/pendingLoanRequest") }style={styles.settingsCard}>
+          <View style={styles.settingsLeft}>
+            <View style={styles.settingsIcon}>
+            </View>
+            <View>
+              <Text style={styles.settingsTitle}>Cesiones pendientes de confirmacion</Text>
+            </View>
+          </View>
+          <Text style={styles.chev}>›</Text>
+        </Pressable>
+
+        <Pressable onPress={() => router.push("/(noNabvar)/returnGamesList") }style={styles.settingsCard}>
+          <View style={styles.settingsLeft}>
+            <View style={styles.settingsIcon}>
+            </View>
+            <View>
+              <Text style={styles.settingsTitle}>Devoluciones</Text>
+            </View>
+          </View>
+          <Text style={styles.chev}>›</Text>
+        </Pressable>
+
+                 <Pressable onPress={() => router.push("/(noNabvar)/pendingDeliveries") }style={styles.settingsCard}>
+          <View style={styles.settingsLeft}>
+            <View style={styles.settingsIcon}>
+            </View>
+            <View>
+              <Text style={styles.settingsTitle}>Entregas</Text>
+            </View>
+          </View>
+          <Text style={styles.chev}>›</Text>
+        </Pressable>
+
+
+
+
         {/* Logout */}
         <Pressable onPress={onLogout} style={styles.logout}>
           <Text style={styles.logoutIcon}>↪</Text>

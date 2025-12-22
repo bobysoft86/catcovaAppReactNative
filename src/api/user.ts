@@ -17,7 +17,6 @@ export const getUserProfile = async () => {
 export const getUserPlayersAndOrganizations = async (userId: number) => {
   try {
     const response = await api.get(baseUrl + `/userPlayersAndOrganizations/${userId}`);
-    console.log("User players and organizations:", response.data);
     return response.data;
   } catch (error) {
     console.error("Error fetching user players and organizations:", error);

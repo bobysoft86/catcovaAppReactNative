@@ -5,3 +5,12 @@ export interface UserModel {
   email: string;
   role: string;
 }
+
+
+export interface UserTypeItem  {
+    id: number;
+    name: string;
+    role: string;
+    originalId:number;
+    type: "USER" | "PLAYER" | "ORG" | "CUSTOMER";
+};

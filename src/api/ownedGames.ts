@@ -34,6 +34,11 @@ export async function updateOwnedGame(
 }
 
 export async function myOwnedGamesList(): Promise <OwnedGame[]>{
-  const res = await api.get<OwnedGame[]>(`${baseUrl}/myOwnedGames`);
+  const res = await api.get<OwnedGame[]>(`${baseUrl}/getMyOwnedGames`);
+  return res.data;
+}
+
+export async function getOwnedGameById(id:String): Promise <OwnedGame>{
+  const res = await api.get<OwnedGame>(`${baseUrl}/getOwnedGameById/${id}`);
   return res.data;
 }

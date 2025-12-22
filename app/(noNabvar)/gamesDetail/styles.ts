@@ -192,9 +192,9 @@ export const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     paddingHorizontal: 18,
-    backgroundColor: "rgba(11, 23, 19, 0.85)",
+    backgroundColor: BG,
     borderTopWidth: 1,
-    borderTopColor: "rgba(255,255,255,0.08)",
+    borderTopColor: BG,
   },
   cta: {
     marginTop: 10,

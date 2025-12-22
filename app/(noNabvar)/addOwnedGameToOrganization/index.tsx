@@ -19,6 +19,7 @@ import { getOwnedGamesMeta, listOwnedGames, updateOwnedGame } from "@/src/api/ow
 import { GameBdd, OwnedGame } from "@/src/models/game-model";
 import { getAllGamesBdd } from "@/src/api/games";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { UserTypeItem } from "@/src/models/user-model";
 
 
 export default function addOwnedGameToOrganization() {
@@ -40,19 +41,11 @@ export default function addOwnedGameToOrganization() {
   const [statusId, setStatusId] = useState<number | null>(null);
   const [valueEur, setValueEur] = useState("0");
   const [userTypeSelected, setUserType] = useState<UserTypeItem | null>(null);
-  
   const [user, setUser] = useState<User | null>(null);
+  
   const twoCols = width >= 420;
 
 const USER_TYPE_SELECTED_KEY = "user_type_selected";
-
-
-type UserTypeItem = {
-    id: number;
-    name: string;
-    role: string;
-    type: "USER" | "PLAYER" | "ORG";
-};
 
  useEffect(() => {
     const fetchGames = async () => {
@@ -157,7 +150,7 @@ type UserTypeItem = {
         isActiveToRent,
         isActiveToChange,
         maxRentTime: Number(maxRentDays),
-        locationId: userTypeSelected.id
+        locationId: userTypeSelected.originalId
       });
       router.replace("/(tabs)/games");
     } catch (error) {

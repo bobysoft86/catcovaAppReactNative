@@ -10,13 +10,9 @@ import SelectSheet from "@/src/components/selectSheet";
 import { getUserPlayersAndOrganizations } from "@/src/api/user";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useTransitionProgress } from "react-native-screens";
+import { UserTypeItem } from "@/src/models/user-model";
 
-type UserTypeItem = {
-    id: number;
-    name: string;
-    role: string;
-    type: "USER" | "PLAYER" | "ORG";
-};
+
 
 const USER_TYPE_SELECTED_KEY = "user_type_selected";
 
@@ -48,42 +44,59 @@ export default function HomeScreen() {
     }, []);
 
 
-    useEffect(() => {
-        if (!user?.id) return;
-        let mounted = true;
+useEffect(() => {
+  if (!user?.id) return;
+  let mounted = true;
 
-        (async () => {
-            try {
-                const res = await getUserPlayersAndOrganizations(user.id);
-                const list: UserTypeItem[] = res?.result ?? [];
-                if (!mounted) return;
-                setUserTypesList(list);
-                if (list.length && userTypeSelected === null) {
-                    setUserType(list[0]);
-                    try {
-                        await AsyncStorage.setItem(USER_TYPE_SELECTED_KEY, JSON.stringify(list[0]));
-                    } catch (e) {
-                        console.error("Error guardando UserTypeSelected", e);
-                    }
-                }
-            } catch (error) {
-                console.error("Error fetching user types:", error);
-            }
-        })();
+  (async () => {
+    try {
+      const res = await getUserPlayersAndOrganizations(user.id);
 
-        return () => {
-            mounted = false;
-        };
-    }, [user?.id]);
+      const rawList: UserTypeItem[] = res?.result ?? [];
 
+      const list: UserTypeItem[] = rawList.map((item, index) => ({
+        ...item,
+        originalId: item.id,   // 👈 id real del backend
+        id: index + 1,         // 👈 id consecutivo para la UI
+      }));
+
+      if (!mounted) return;
+
+      console.log(list);
+      setUserTypesList(list);
+
+      if (list.length && userTypeSelected === null) {
+        const firstUserEnter = list.find((x) => x.type === "USER");
+        if (!firstUserEnter) return;
+
+        setUserType(firstUserEnter);
+
+        try {
+          await AsyncStorage.setItem(
+            USER_TYPE_SELECTED_KEY,
+            JSON.stringify(firstUserEnter)
+          );
+        } catch (e) {
+          console.error("Error guardando UserTypeSelected", e);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching user types:", error);
+    }
+  })();
+
+  return () => {
+    mounted = false;
+  };
+}, [user?.id]);
 
 
     const userTypeLabel = userTypeSelected?.name ?? "Selecciona tipo de usuario";
 
 
+    const isUser = userTypeSelected?.type === "USER";
     const isPlayer = userTypeSelected?.type === "PLAYER";
     const isOrg = userTypeSelected?.type === "ORG";
-    const isUser = userTypeSelected?.type === "USER";
 
     return (
         <View style={[styles.screen, { paddingTop: insets.top + 10 }]}>
@@ -102,7 +115,7 @@ export default function HomeScreen() {
 
             <SelectSheet
                 visible={userTypeOptionsSelected}
-                title="seleccionar logueado"
+                title="Seleccionar logueado"
                 selected={userTypeSelected?.id ?? null}
                 onClose={() => setTypeOptionsSelectedOpen(false)}
                 onSelect={async (v) => {
@@ -262,6 +275,7 @@ function UserContent() {
                 </Pressable>
             </View>
 
+
             <View style={{ height: 110 }} />
         </>
     );
@@ -286,7 +300,7 @@ function OrgContent({ userTypeSelected }: { userTypeSelected: UserTypeItem | nul
                 </Pressable>
 )}
 
-                <Pressable onPress={() =>router.push(`/organization/organizationGamesList?id=${userTypeSelected?.id}`)} style={[styles.actionBig, styles.actionScan]}>
+                <Pressable onPress={() =>router.push(`/organization/organizationGamesList?id=${userTypeSelected?.originalId}`)} style={[styles.actionBig, styles.actionScan]}>
                     <View style={[styles.actionIcon, styles.actionIconDark]}>
                         <Text style={[styles.actionIconText, { color: TEXT }]}>📚</Text>
                     </View>
