@@ -23,28 +23,21 @@ export default function HomeScreen() {
     const [userTypeSelected, setUserType] = useState<UserTypeItem | null>(null);
     const [userTypeList, setUserTypesList] = useState<UserTypeItem[]>([]);
 
+    const userTypeLabel = userTypeSelected?.name ?? "Selecciona tipo de usuario";
 
-    useEffect(() => {
-        let mounted = true;
-        (async () => {
-            const u = await getUserData<User>();
-            if (mounted) setUser(u);
 
-            // cargar selección previa de UserType
-            try {
-                const stored = await AsyncStorage.getItem(USER_TYPE_SELECTED_KEY);
-                if (stored) setUserType(JSON.parse(stored));
-            } catch (e) {
-                console.error("Error leyendo UserTypeSelected", e);
-            }
-        })();
-        return () => {
-            mounted = false;
-        };
-    }, []);
+    const isUser = userTypeSelected?.type === "USER";
+    const isPlayer = userTypeSelected?.type === "PLAYER";
+    const isOrg = userTypeSelected?.type === "ORG";
+
+
 
 
 useEffect(() => {
+
+loadUserStaorageData()
+
+
   if (!user?.id) return;
   let mounted = true;
 
@@ -91,12 +84,26 @@ useEffect(() => {
 }, [user?.id]);
 
 
-    const userTypeLabel = userTypeSelected?.name ?? "Selecciona tipo de usuario";
+function loadUserStaorageData(){
+
+            let mounted = true;
+        (async () => {
+            const u = await getUserData<User>();
+            if (mounted) setUser(u);
+            // cargar selección previa de UserType
+            try {
+                const stored = await AsyncStorage.getItem(USER_TYPE_SELECTED_KEY);
+                if (stored) setUserType(JSON.parse(stored));
+            } catch (e) {
+                console.error("Error leyendo UserTypeSelected", e);
+            }
+        })();
+        return () => {
+            mounted = false;
+        };
+}
 
 
-    const isUser = userTypeSelected?.type === "USER";
-    const isPlayer = userTypeSelected?.type === "PLAYER";
-    const isOrg = userTypeSelected?.type === "ORG";
 
     return (
         <View style={[styles.screen, { paddingTop: insets.top + 10 }]}>
@@ -209,7 +216,7 @@ function UserContent() {
             <View style={styles.heroCard}>
                 <ImageBackground
                     source={{
-                        uri: "https://images.unsplash.com/photo-1611371805429-8b5c1f3d7f9f?auto=format&fit=crop&w=1200&q=60",
+                        uri: "",
                     }}
                     style={styles.heroBg}
                     imageStyle={styles.heroBgImg}
@@ -232,7 +239,7 @@ function UserContent() {
 
             <View style={styles.sectionHeader}>
                 <Text style={styles.sectionTitle}>Préstamos activos</Text>
-                <Pressable onPress={() => router.push("/(noNabvar)/sharedGamesList")}>
+                <Pressable onPress={() => router.push("/(noNabvar)/returnGamesList")}>
                     <Text style={styles.sectionAction}>Ver todos</Text>
                 </Pressable>
             </View>
@@ -240,7 +247,7 @@ function UserContent() {
             <View style={styles.loanCard}>
                 <Image
                     source={{
-                        uri: "https://cf.geekdo-images.com/W3Bsga_u0V9Pq7yY1nD81Q__itemrep/img/cxW2L2_0Jq5wS8cQy0sznDg7t1c=/fit-in/246x300/filters:strip_icc()/pic2419375.jpg",
+                        uri: "",
                     }}
                     style={styles.loanImg}
                 />
@@ -255,6 +262,19 @@ function UserContent() {
                     <Text style={styles.chevText}>›</Text>
                 </View>
             </View>
+
+             
+             <Pressable onPress={()=> router.push("/(noNabvar)/matchCreate")}>    
+
+                <View style={styles.loanCard}>
+                    <Text style={styles.loanTitle}>Registrar Partida</Text>
+               <View style={styles.chev}>
+                    <Text style={styles.chevText}>›</Text>
+                </View>
+            </View>
+             </Pressable>
+      
+
 
             <View style={styles.actionsRow}>
                 <Pressable

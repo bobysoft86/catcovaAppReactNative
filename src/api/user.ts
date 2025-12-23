@@ -23,3 +23,4 @@ export const getUserPlayersAndOrganizations = async (userId: number) => {
     throw error;
   }
 };
+

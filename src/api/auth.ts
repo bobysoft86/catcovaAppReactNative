@@ -53,3 +53,11 @@ export async function signup(
 
   return user;
 }
+
+export async function homeMetaData():Promise <any> {
+
+ const res = await api.put(`${baseUrl}/homeUserMetaData}`);
+  return res.data;
+
+
+}

@@ -7,4 +7,5 @@ export const colors = {
   text: '#F9FAFB',          // texto principal
   muted: '#9CA3AF',         // texto secundario
   border: '#1F2937',
+  greenDark:'#052B1C'
 };

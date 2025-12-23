@@ -20,7 +20,7 @@ type Props<T extends string | number> = {
   visible: boolean;
   title: string;
   options: Option<T>[];
-  selected?: T | null;
+  selected?: T | number[] | null;
   onClose: () => void;
   onSelect: (value: T) => void;
   searchable?: boolean;
@@ -85,7 +85,9 @@ export default function SelectSheet<T extends string | number>({
             style={{ flex: 1 }}
             contentContainerStyle={{ paddingBottom: 18 }}
             renderItem={({ item }) => {
-              const active = selected === item.value;
+              const active = Array.isArray(selected)
+                ? selected.includes(item.value)
+                : selected === item.value;
               return (
                 <Pressable
                   onPress={() => {

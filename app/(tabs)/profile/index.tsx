@@ -243,6 +243,18 @@ export default function ProfileScreen() {
         </Pressable>
 
 
+                 <Pressable onPress={() => router.push("/(noNabvar)/matchesList") }style={styles.settingsCard}>
+          <View style={styles.settingsLeft}>
+            <View style={styles.settingsIcon}>
+            </View>
+            <View>
+              <Text style={styles.settingsTitle}>Partidas Registradas</Text>
+            </View>
+          </View>
+          <Text style={styles.chev}>›</Text>
+        </Pressable>
+
+
 
 
         {/* Logout */}
