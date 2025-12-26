@@ -59,7 +59,6 @@ export default function MatchesListScreen() {
     try {
       setRefreshing(true);
       const matches = await getAllUserMatches();
-      console.log(matches)
       setCards(mapMatches(matches ?? []));
     } catch (e) {
       console.error("Error fetching matches list", e);

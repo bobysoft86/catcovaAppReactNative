@@ -7,7 +7,6 @@ const baseUrl = "/ownedGames";
 
 export async function createOwnedGameBdd(data: OwnedGameCreatePayload): Promise<GameBdd> {
   const res = await api.post<GameBdd>(`${baseUrl}/createOwnedGame`, data);
-  console.log("createOwnedGameBdd response:", res.data);
   return res.data;
 }
 

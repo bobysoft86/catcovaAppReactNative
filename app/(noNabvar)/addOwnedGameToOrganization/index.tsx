@@ -53,7 +53,6 @@ const USER_TYPE_SELECTED_KEY = "user_type_selected";
         const gamesFromBdd = await getAllGamesBdd();
 
         setGamesList(gamesFromBdd ?? []);
-        console.log("Games from BDD:", gamesFromBdd);
       } catch (error) {
         console.error("Error fetching games:", error);
       } finally {

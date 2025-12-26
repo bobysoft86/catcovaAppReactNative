@@ -44,7 +44,6 @@ export default function CreateOwnedGameScreen() {
         const gamesFromBdd = await getAllGamesBdd();
 
         setGamesList(gamesFromBdd ?? []);
-        console.log("Games from BDD:", gamesFromBdd);
       } catch (error) {
         console.error("Error fetching games:", error);
       } finally {
@@ -101,7 +100,6 @@ export default function CreateOwnedGameScreen() {
 
     try {
       await createOwnedGameBdd(payload);
-      console.log("Crear OwnedGame", payload);
       router.replace("/(tabs)/games");
     } catch (error) {
       console.error("Error creating OwnedGame:", error);

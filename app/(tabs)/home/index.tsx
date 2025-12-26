@@ -55,7 +55,6 @@ loadUserStaorageData()
 
       if (!mounted) return;
 
-      console.log(list);
       setUserTypesList(list);
 
       if (list.length && userTypeSelected === null) {
@@ -82,6 +81,8 @@ loadUserStaorageData()
     mounted = false;
   };
 }, [user?.id]);
+
+
 
 
 function loadUserStaorageData(){
@@ -114,7 +115,9 @@ function loadUserStaorageData(){
                     onProfile={() => router.push("/profile")}
                 />
 
+
                 {isPlayer == true && <PlayerContent />}
+             
                 {isUser == true && <UserContent />}
                 {isOrg == true && <OrgContent userTypeSelected={userTypeSelected} />}
 
@@ -195,7 +198,9 @@ function UserContent() {
                     <View style={styles.statsRow}>
                         <Text style={styles.statsNumber}>12</Text>
                         <View style={styles.delta}>
-                            <Text style={styles.deltaText}>↗ +3</Text>
+                            <Text style={styles.deltaText}>↗ +10</Text>                              
+
+
                         </View>
                     </View>
                 </View>
@@ -232,6 +237,7 @@ function UserContent() {
                         <Pressable onPress={() => router.push("/(tabs)/games")} style={styles.heroLink}>
                             <Text style={styles.heroLinkText}>Ver colección</Text>
                             <Text style={styles.heroLinkArrow}>→</Text>
+                            
                         </Pressable>
                     </LinearGradient>
                 </ImageBackground>

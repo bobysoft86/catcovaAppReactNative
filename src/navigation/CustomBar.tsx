@@ -19,6 +19,7 @@ export default function CustomTabBar({
     <View style={[styles.root, { paddingBottom: Math.max(insets.bottom, 10) }]} pointerEvents="box-none">
       <View style={styles.pill} pointerEvents="auto">
         {state.routes.map((route, index) => {
+
           const isFocused = state.index === index;
           const onPress = () => {
             const event = navigation.emit({
@@ -40,15 +41,15 @@ export default function CustomTabBar({
               hitSlop={12}
             >
               <View style={[styles.dot, isFocused ? styles.dotActive : styles.dotInactive]} />
-
-              {/* <View>
+{/* 
+              <View>
                 (route.name === "Home" ? "🏠" : route.name)
                 <h3 style={styles.text}>
 
                 </h3>
 
-
-              </View> */}
+              </View>
+ */}
             </Pressable>
           );
         })}

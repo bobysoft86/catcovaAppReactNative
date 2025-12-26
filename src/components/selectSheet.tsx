@@ -138,13 +138,14 @@ const sheetStyles = {
   },
   sheet: {
     backgroundColor: "#0B1713",
-    borderTopLeftRadius: 22,
-    borderTopRightRadius: 22,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.10)",
     paddingHorizontal: 16,
     paddingTop: 14,
-    maxHeight: "75%" as const,
+    maxHeight: "100%" as const,
+    height: "100%" as const,
   },
   header: {
     flexDirection: "row" as const,

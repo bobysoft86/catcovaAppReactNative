@@ -105,7 +105,6 @@ export default function MyGamesScreen() {
     const fetchOwnedGamesData = async () => {
       try {
         const OwnedGamesData = await myOwnedGamesList()
-        console.log(OwnedGamesData)
         setOwnedGames(OwnedGamesData)
       } catch (error) {
 
@@ -405,7 +404,6 @@ function GameRowCard({
 
 function checkGameStatus(ownedGames: OwnedGame[] | undefined) {
   let result = ownedGames?.filter((x: OwnedGame) => x?.rentals?.find((x: RentalModel) => x.rentalStatusId === 1)).length ?? 0;
-  console.log(result)
   return result
 
 }
