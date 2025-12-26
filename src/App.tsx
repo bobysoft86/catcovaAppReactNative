@@ -1,12 +1,15 @@
-// App.tsx
+import 'react-native-get-random-values';
+
 import { NavigationContainer } from '@react-navigation/native';
-import RootNavigator from './navigation/RootNavigation';
 
 
 export default function App() {
+    console.log('✅ App mounted'); // <-- este DEBE salir siempre
+
   return (
-    <NavigationContainer>
-      <RootNavigator />
-    </NavigationContainer>
+
+      <NavigationContainer>
+        <RootNavigator />
+      </NavigationContainer>
   );
 }
