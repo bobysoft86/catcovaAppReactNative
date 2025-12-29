@@ -1,87 +1,64 @@
-import React, { useMemo, useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  Pressable,
-  FlatList,
-  Image,
-} from "react-native";
+import React, { useEffect, useMemo, useState } from "react";
+import { View, Text, TextInput, Pressable, FlatList, Image, ActivityIndicator } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import api from "@/src/api/client";
+import { getUserData } from "@/src/storage/authStorage";
+import { styles } from "./styles";
+import { useRouter } from "expo-router";
+import { getUserChats } from "@/src/api/chat";
+import { ApiChat, ApiChatMember } from "@/src/models/chat-model";
 
-const BG = "#0B1713";
-const CARD = "rgba(255,255,255,0.06)";
-const BORDER = "rgba(255,255,255,0.10)";
-const TEXT = "#EAF2EE";
-const MUTED = "rgba(234,242,238,0.65)";
-const GREEN = "#22C55E";
 
-type ChatFilter = "Todos" | "Préstamos" | "Grupos";
+type ChatFilter = "Todos" | "Préstamos" | "Grupos" |"Personal";
 
 type ChatRow = {
   id: string;
-  type: "dm" | "group";
+  roomId: string;
+  type: "dm" | "group" | "rental";
   title: string;
   subtitle: string;
   tag?: { label: string; color: string; bg: string };
   avatar?: string;
   time: string;
   unread?: boolean;
+  unreadCount?: number;
 };
 
 export default function ChatListScreen() {
   const insets = useSafeAreaInsets();
   const [filter, setFilter] = useState<ChatFilter>("Todos");
   const [query, setQuery] = useState("");
+  const [chats, setChats] = useState<ChatRow[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [reloadTick, setReloadTick] = useState(0);
 
-  const chats = useMemo<ChatRow[]>(
-    () => [
-      {
-        id: "1",
-        type: "dm",
-        title: "Sofía R.",
-        subtitle: "Hey, ¿está disponible Catan para el…",
-        tag: { label: "CATAN", color: "#B7F7D0", bg: "rgba(34,197,94,0.18)" },
-        avatar:
-          "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=60",
-        time: "10:30 AM",
-        unread: true,
-      },
-      {
-        id: "2",
-        type: "dm",
-        title: "Marco P.",
-        subtitle: "Gracias por devolver Carcassonne …",
-        tag: { label: "CARCASSONNE", color: "#C7D2FE", bg: "rgba(99,102,241,0.18)" },
-        avatar:
-          "https://images.unsplash.com/photo-1542206395-9feb3edaa68d?auto=format&fit=crop&w=200&q=60",
-        time: "Ayer",
-      },
-      {
-        id: "3",
-        type: "group",
-        title: "Noche de Juegos 🎲",
-        subtitle: "Laura: Nos vemos a las 8 en mi casa.",
-        tag: { label: "EVENTO", color: "#E9D5FF", bg: "rgba(168,85,247,0.18)" },
-        avatar:
-          "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=200&q=60",
-        time: "Martes",
-        unread: true,
-      },
-      {
-        id: "4",
-        type: "dm",
-        title: "Alex D.",
-        subtitle: "¡Perfecto! Nos vemos entonces.",
-        tag: { label: "TICKET TO RIDE", color: "#FDE68A", bg: "rgba(245,158,11,0.16)" },
-        avatar:
-          "https://images.unsplash.com/photo-1552058544-f2b08422138a?auto=format&fit=crop&w=200&q=60",
-        time: "Lun",
-      },
-    ],
-    []
-  );
+  useEffect(() => {
+    let mounted = true;
+
+    const loadChats = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const user = await getUserData<{ id?: number }>();
+        const res = await getUserChats();
+        const rows = mapChats(res ?? [], user?.id ?? null);
+
+        if (mounted) setChats(rows);
+      } catch (e) {
+        if (mounted) setError("No se pudieron cargar los chats.");
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    };
+
+    loadChats();
+
+    return () => {
+      mounted = false;
+    };
+  }, [reloadTick]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -98,7 +75,7 @@ export default function ChatListScreen() {
           ? true
           : filter === "Grupos"
           ? c.type === "group"
-          : c.tag?.label !== undefined; // "Préstamos": mock simple (los que tienen tag)
+          : c.type === "rental";
 
       return matchesQuery && matchesFilter;
     });
@@ -109,7 +86,7 @@ export default function ChatListScreen() {
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.h1}>Conversaciones</Text>
-        <Text style={styles.h2}>3 nuevos mensajes</Text>
+        <Text style={styles.h2}>{getUnreadLabel(chats)}</Text>
       </View>
 
       {/* Search */}
@@ -141,22 +118,101 @@ export default function ChatListScreen() {
       </View>
 
       {/* List */}
-      <FlatList
-        data={filtered}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.list}
-        showsVerticalScrollIndicator={false}
-        renderItem={({ item }) => <ChatItem item={item} />}
-        ListFooterComponent={<FooterCard />}
-      />
+      {loading ? (
+        <View style={styles.loadingWrap}>
+          <ActivityIndicator />
+          <Text style={styles.loadingText}>Cargando chats…</Text>
+        </View>
+      ) : error ? (
+        <View style={styles.loadingWrap}>
+          <Text style={styles.errorText}>{error}</Text>
+          <Pressable onPress={() => setReloadTick((n) => n + 1)} style={styles.retryBtn}>
+            <Text style={styles.retryText}>Reintentar</Text>
+          </Pressable>
+        </View>
+      ) : (
+        <FlatList
+          data={filtered}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={styles.list}
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item }) => <ChatItem item={item} />}
+          ListFooterComponent={<FooterCard />}
+        />
+      )}
     </View>
   );
 }
 
+function mapChats(chats: ApiChat[], currentUserId: number | null): ChatRow[] {
+  return chats.map((chat) => {
+    const other = getOtherMember(chat.members, currentUserId);
+    const title = other?.user?.name || other?.user?.email || other?.user?.phone || chat.roomId;
+    const subtitle = chat.lastMessage?.body ?? "Sin mensajes";
+    const time = formatTime(chat.lastMessage?.ts ?? Date.parse(chat.createdAt));
+    const type = toChatRowType(chat.type, chat.members.length);
+    const tag = toTag(chat.type);
+
+    return {
+      id: String(chat.id),
+      roomId: chat.roomId,
+      type,
+      title,
+      subtitle,
+      tag,
+      time,
+      unread: !!chat.unread,
+      unreadCount: chat.unreadCount ?? 0,
+    };
+  });
+}
+
+function toChatRowType(type: string, membersCount: number): ChatRow["type"] {
+  if (type === "RENTAL") return "rental";
+  if (type === "GROUP") return "group";
+  if (type === "DIRECT") return "dm";
+  if (membersCount > 2) return "group";
+  return "dm";
+}
+
+function toTag(type: string): ChatRow["tag"] | undefined {
+  if (type === "RENTAL") {
+    return { label: "PRÉSTAMO", color: "#B7F7D0", bg: "rgba(34,197,94,0.18)" };
+  }
+  if (type === "GROUP") {
+    return { label: "GRUPO", color: "#C7D2FE", bg: "rgba(99,102,241,0.18)" };
+  }
+  return undefined;
+}
+
+function getOtherMember(members: ApiChatMember[], currentUserId: number | null) {
+  if (!members?.length) return null;
+  if (!currentUserId) return members[0] ?? null;
+  return members.find((m) => m.userId !== currentUserId) ?? members[0] ?? null;
+}
+
+function formatTime(ts: number) {
+  if (!Number.isFinite(ts)) return "";
+  const date = new Date(ts);
+  return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+}
+
+function getUnreadLabel(chats: ChatRow[]) {
+  const total = chats.reduce((acc, c) => acc + (c.unreadCount ?? (c.unread ? 1 : 0)), 0);
+  if (total <= 0) return "Sin mensajes nuevos";
+  return `${total} nuevos mensajes`;
+}
+
 function ChatItem({ item }: { item: ChatRow }) {
+  const router = useRouter();
   return (
     <Pressable
-      onPress={() => console.log("open chat", item.id)}
+      onPress={() =>
+        router.push({
+          pathname: "/(noNabvar)/conversationChat/[id]",
+          params: { id: item.id, title: item.title, roomId: item.roomId },
+        })
+      }
       style={({ pressed }) => [styles.rowCard, pressed && { opacity: 0.9 }]}
     >
       <Image
@@ -188,7 +244,7 @@ function ChatItem({ item }: { item: ChatRow }) {
       </View>
 
       {/* unread dot */}
-      {item.unread ? <View style={styles.unreadDot} /> : <View style={{ width: 10 }} />}
+      {item.unread || (item.unreadCount ?? 0) > 0 ? <View style={styles.unreadDot} /> : <View style={{ width: 10 }} />}
     </Pressable>
   );
 }
@@ -210,114 +266,3 @@ function FooterCard() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: BG },
-
-  header: { paddingHorizontal: 18, alignItems: "center", gap: 6, marginBottom: 10 },
-  h1: { color: TEXT, fontSize: 18, fontWeight: "900" },
-  h2: { color: MUTED, fontSize: 12, fontWeight: "700" },
-
-  searchWrap: {
-    marginHorizontal: 18,
-    height: 46,
-    borderRadius: 14,
-    backgroundColor: CARD,
-    borderWidth: 1,
-    borderColor: BORDER,
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 12,
-    gap: 10,
-  },
-  searchIcon: { color: MUTED, fontSize: 14 },
-  searchInput: { flex: 1, color: TEXT, fontSize: 14, fontWeight: "600" },
-
-  pillsRow: { flexDirection: "row", gap: 10, paddingHorizontal: 18, marginTop: 12, marginBottom: 8 },
-  pill: {
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-    borderRadius: 999,
-    backgroundColor: CARD,
-    borderWidth: 1,
-    borderColor: BORDER,
-  },
-  pillActive: { backgroundColor: "rgba(34,197,94,0.20)", borderColor: "rgba(34,197,94,0.35)" },
-  pillText: { color: MUTED, fontSize: 12, fontWeight: "800" },
-  pillTextActive: { color: TEXT },
-
-  list: { paddingHorizontal: 18, paddingTop: 8, paddingBottom: 120, gap: 12 },
-
-  rowCard: {
-    flexDirection: "row",
-    gap: 12,
-    padding: 14,
-    borderRadius: 22,
-    backgroundColor: CARD,
-    borderWidth: 1,
-    borderColor: BORDER,
-    alignItems: "center",
-  },
-  avatar: { width: 46, height: 46, borderRadius: 16, backgroundColor: "rgba(255,255,255,0.06)" },
-
-  topRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", gap: 10 },
-  name: { color: TEXT, fontSize: 14, fontWeight: "900", flex: 1 },
-  time: { color: "rgba(234,242,238,0.55)", fontSize: 11, fontWeight: "700" },
-
-  tagPill: {
-    alignSelf: "flex-start",
-    marginTop: 6,
-    marginBottom: 6,
-    borderRadius: 999,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderWidth: 1,
-  },
-  tagText: { fontSize: 10, fontWeight: "900", letterSpacing: 0.5 },
-
-  preview: { color: MUTED, fontSize: 12, fontWeight: "600" },
-
-  unreadDot: {
-    width: 10,
-    height: 10,
-    borderRadius: 99,
-    backgroundColor: GREEN,
-    borderWidth: 2,
-    borderColor: BG,
-  },
-
-  footerCard: {
-    marginTop: 10,
-    borderRadius: 22,
-    borderWidth: 1,
-    borderColor: "rgba(34,197,94,0.18)",
-    backgroundColor: "rgba(0,0,0,0.14)",
-    padding: 16,
-    alignItems: "center",
-    gap: 10,
-    borderStyle: "dashed",
-  },
-  footerIconCircle: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: "rgba(34,197,94,0.18)",
-    borderWidth: 1,
-    borderColor: "rgba(34,197,94,0.35)",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  footerTitle: { color: TEXT, fontSize: 14, fontWeight: "900" },
-  footerSub: { color: MUTED, fontSize: 12, fontWeight: "600", textAlign: "center" },
-
-  footerBtn: {
-    marginTop: 4,
-    backgroundColor: "rgba(34,197,94,0.14)",
-    borderWidth: 1,
-    borderColor: "rgba(34,197,94,0.35)",
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 999,
-  },
-  footerBtnText: { color: "#B7F7D0", fontSize: 12, fontWeight: "900" },
-});

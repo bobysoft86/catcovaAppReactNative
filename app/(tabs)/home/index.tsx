@@ -5,12 +5,12 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { styles, GREEN, TEXT } from "./styles";
 import { getUserData } from "@/src/storage/authStorage";
-import { User } from "@/src/api/auth";
+
 import SelectSheet from "@/src/components/selectSheet";
 import { getUserPlayersAndOrganizations } from "@/src/api/user";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useTransitionProgress } from "react-native-screens";
-import { UserTypeItem } from "@/src/models/user-model";
+import { UserModel, UserTypeItem } from "@/src/models/user-model";
 
 
 
@@ -18,7 +18,7 @@ const USER_TYPE_SELECTED_KEY = "user_type_selected";
 
 export default function HomeScreen() {
     const insets = useSafeAreaInsets();
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<UserModel | null>(null);
     const [userTypeOptionsSelected, setTypeOptionsSelectedOpen] = useState(false);
     const [userTypeSelected, setUserType] = useState<UserTypeItem | null>(null);
     const [userTypeList, setUserTypesList] = useState<UserTypeItem[]>([]);
@@ -89,7 +89,7 @@ function loadUserStaorageData(){
 
             let mounted = true;
         (async () => {
-            const u = await getUserData<User>();
+            const u = await getUserData<UserModel>();
             if (mounted) setUser(u);
             // cargar selección previa de UserType
             try {

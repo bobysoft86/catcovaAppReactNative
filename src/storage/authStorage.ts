@@ -1,10 +1,10 @@
 // src/storage/authStorage.ts
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { User } from "../api/auth";
 import { use } from "react";
 
 const TOKEN_KEY = "auth_token";
 const USER_DATA_KEY = "user_data";
+const MATRIX_DATA_KEY = "matrix_data"
 
 export async function saveToken(token: string): Promise<void> {
   try {
@@ -17,6 +17,13 @@ export async function saveToken(token: string): Promise<void> {
 export async function saveUserData(user: any): Promise<void> {
   try {
     await AsyncStorage.setItem(USER_DATA_KEY, JSON.stringify(user));
+  } catch (error) {
+    console.error("Error saving user data", error);
+  }
+}
+export async function saveMatrixData(matrixData: any): Promise<void> {
+  try {
+    await AsyncStorage.setItem(MATRIX_DATA_KEY, JSON.stringify(matrixData));
   } catch (error) {
     console.error("Error saving user data", error);
   }
@@ -35,6 +42,16 @@ export async function getUserData<T = any>(): Promise<T | null> {
   try {
     const userData = await AsyncStorage.getItem(USER_DATA_KEY);
     return userData ? JSON.parse(userData) : null;
+  } catch (error) {
+    console.error("Error getting user data", error);
+    return null;
+  }
+}
+
+export async function getMatrixData<T = any>(): Promise<T | null> {
+  try {
+    const matrixData = await AsyncStorage.getItem(MATRIX_DATA_KEY);
+    return matrixData ? JSON.parse(matrixData) : null;
   } catch (error) {
     console.error("Error getting user data", error);
     return null;

@@ -1,9 +1,10 @@
 
 // === ENUMS BACKEND ===
 
-import { User } from "../api/auth";
+
 import { OrganizationModel } from "./organization-model";
 import { RentalModel } from "./rental";
+import { UserModel } from "./user-model";
 
 export enum Lang {
   en = 'en',
@@ -118,7 +119,7 @@ export interface BoardGamePublisher {
 export interface OwnedGame {
   id: number;
   ownerId: number;
-  owner?: User;
+  owner?: UserModel;
   gameBddId: number;
   gameBdd?: GameBdd
   statusId?: number;

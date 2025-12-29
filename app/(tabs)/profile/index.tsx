@@ -37,7 +37,7 @@ export default function ProfileScreen() {
       try {
         setLoadingProfile(true);
         const dataProfile = await getUserProfile();
-        console.log("Profile data:", dataProfile);
+
         setProfileData(dataProfile);
 
       } catch (error) {
