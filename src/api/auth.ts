@@ -1,22 +1,18 @@
+import { matrixData, UserModel } from "../models/user-model";
 import api from "./client";
-import { saveToken, saveUserData } from "@/src/storage/authStorage";
+import { saveMatrixData, saveToken, saveUserData } from "@/src/storage/authStorage";
 
-export interface User {
-  id: number;
-  name: string;
-  email: string;
-  phone?: string;
-  token?: string;
-}
+
 
 interface AuthResponse {
   token: string;
-  user: User;
+  user: UserModel;
+  matrix: matrixData
 }
 
 const baseUrl = "/auth/"
 
-export async function login(email: string, password: string): Promise<User> {
+export async function login(email: string, password: string): Promise<UserModel> {
 
 
   const res = await api.post<AuthResponse>(`${baseUrl}login`, {
@@ -24,10 +20,12 @@ export async function login(email: string, password: string): Promise<User> {
     password,
   });
 
-  const { token, user } = res.data;
+  const { token, user, matrix } = res.data;
 
   await saveToken(token);
   await saveUserData(user);
+  await saveMatrixData(matrix)
+
 
   return user;
 }
@@ -38,7 +36,7 @@ export async function signup(
   password: string,
   phone:string
 
-): Promise<User> {
+): Promise<UserModel> {
   const res = await api.post<AuthResponse>(`${baseUrl}register`, {
     name,
     email,
@@ -46,10 +44,12 @@ export async function signup(
     password,
   });
 
-  const { token, user } = res.data;
+  const { token, user,matrix } = res.data;
 
   await saveToken(token);
   await saveUserData(user);
+  await saveMatrixData(matrix)
+
 
   return user;
 }

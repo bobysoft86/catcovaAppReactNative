@@ -14,7 +14,7 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
 
   return (
-    <MatrixProvider>
+
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="(auth)" />
@@ -23,6 +23,6 @@ export default function RootLayout() {
         </Stack>
         <StatusBar style="auto" />
       </ThemeProvider>
-    </MatrixProvider>
+
   );
 }
