@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import api from "@/src/api/client";
 import { getUserData } from "@/src/storage/authStorage";
 import { styles } from "./styles";
-import { useRouter } from "expo-router";
+import { router, useRouter } from "expo-router";
 import { getUserChats } from "@/src/api/chat";
 import { ApiChat, ApiChatMember } from "@/src/models/chat-model";
 
@@ -260,7 +260,7 @@ function FooterCard() {
         Explora los juegos disponibles cerca de ti para empezar a chatear.
       </Text>
 
-      <Pressable onPress={() => console.log("explore")} style={styles.footerBtn}>
+      <Pressable onPress={() => router.push({pathname:'/games'})} style={styles.footerBtn}>
         <Text style={styles.footerBtnText}>Explorar juegos</Text>
       </Pressable>
     </View>

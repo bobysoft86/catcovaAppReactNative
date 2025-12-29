@@ -29,6 +29,7 @@ export default function ChatDetailScreen() {
   const [messages, setMessages] = useState<EventLike[]>([]);
   const [loadingMsgs, setLoadingMsgs] = useState(false);
   const listRef = useRef<FlatList<EventLike>>(null);
+  const lastReadEventIdRef = useRef<string | null>(null);
   const { client } = useMatrix();
 
   const title = useMemo(() => {
@@ -44,12 +45,31 @@ export default function ChatDetailScreen() {
     let mounted = true;
     setLoadingMsgs(true);
 
+    const markAsRead = async (event: EventLike) => {
+      const eventId = event?.getId?.();
+      if (!eventId || lastReadEventIdRef.current === eventId) return;
+      lastReadEventIdRef.current = eventId;
+
+      try {
+        if (client.sendReadReceipt) {
+          await client.sendReadReceipt(event, "m.read");
+        }
+        if (client.setRoomReadMarkers) {
+          await client.setRoomReadMarkers(roomId, eventId);
+        }
+      } catch (e) {
+        console.warn("sendReadReceipt error:", e);
+      }
+    };
+
     const loadInitial = () => {
       try {
         const room = client.getRoom?.(roomId);
         const evs = room?.getLiveTimeline?.()?.getEvents?.() ?? [];
         const msgEvs = evs.filter(isMessageEvent);
         if (mounted) setMessages(msgEvs);
+        const last = msgEvs[msgEvs.length - 1];
+        if (last) markAsRead(last);
       } catch (e) {
         console.warn("Error loadInitial messages:", e);
       } finally {
@@ -70,6 +90,10 @@ export default function ChatDetailScreen() {
         if (id && prev.some((p) => p.getId?.() === id)) return prev;
         return [...prev, event];
       });
+
+      const sender = event?.getSender?.();
+      if (sender && sender === client.getUserId?.()) return;
+      markAsRead(event);
     };
 
     client.on?.("Room.timeline", onTimeline);
