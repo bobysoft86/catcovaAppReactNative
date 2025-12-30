@@ -58,6 +58,22 @@ export async function getMatrixData<T = any>(): Promise<T | null> {
   }
 }
 
+
+
+export async function removeLoginData(): Promise<void> {
+  try {
+    await removeToken();
+  await removeUserData();
+    await removeMatrixData()
+    await removeUserTypeSelected();
+  } catch (error) {
+    console.error("Error removing storageData", error);
+    
+  }
+}
+
+
+
 export async function removeToken(): Promise<void> {
   try {
     await AsyncStorage.removeItem(TOKEN_KEY);
@@ -73,4 +89,21 @@ export async function removeUserData(): Promise<void> {
     console.error("Error removing token", error);
   }
 }
+
+export async function removeMatrixData(): Promise<void> {
+  try {
+    await AsyncStorage.removeItem("matrix_data");
+  } catch (error) {
+    console.error("Error removing matrix_data", error);
+  }
+}
+
+export async function removeUserTypeSelected(): Promise<void> {
+  try {
+    await AsyncStorage.removeItem("user_type_selected");
+  } catch (error) {
+    console.error("Error removing user_type_selected", error);
+  }
+}
+
 

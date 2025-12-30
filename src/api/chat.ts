@@ -10,3 +10,11 @@ export async function getUserChats(): Promise<ApiChat[]> {
   console.log(res.data.chats)
   return res.data.chats;
 }
+
+
+export async function createRentalchatRoom(inviteUserId: number,rentalId:number ):Promise<ApiChat>{
+  const res = await api.post(`${baseUrl}/createRentalRoom`,{inviteUserId,rentalId});
+  return res.data;
+}
+
+

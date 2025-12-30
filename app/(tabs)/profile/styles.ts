@@ -140,7 +140,7 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     marginBottom: 6,
   },
-  smallIcon: { color: "#B7F7D0", fontSize: 16, fontWeight: "900" },
+  smallIcon: { color: colors.mintSoft, fontSize: 16, fontWeight: "900" },
   smallTitle: { color: TEXT, fontSize: 16, fontWeight: "900" },
   smallSub: { color: MUTED, fontSize: 12, fontWeight: "600" },
 
@@ -179,6 +179,6 @@ export const styles = StyleSheet.create({
     gap: 8,
     paddingVertical: 10,
   },
-  logoutIcon: { color: "#FF4D4D", fontSize: 16, fontWeight: "900" },
-  logoutText: { color: "#FF4D4D", fontSize: 14, fontWeight: "900" },
+  logoutIcon: { color: colors.danger, fontSize: 16, fontWeight: "900" },
+  logoutText: { color: colors.danger, fontSize: 14, fontWeight: "900" },
 });

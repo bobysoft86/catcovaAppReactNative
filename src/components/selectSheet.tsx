@@ -9,6 +9,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
+import { sheetStyles } from "./selectSheet.styles";
 
 type Option<T extends string | number> = {
   value: T;
@@ -122,72 +123,3 @@ export default function SelectSheet<T extends string | number>({
     </Modal>
   );
 }
-
-const sheetStyles = {
-  backdrop: {
-    position: "absolute" as const,
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    backgroundColor: "rgba(0,0,0,0.55)",
-  },
-  wrapper: {
-    flex: 1,
-    justifyContent: "flex-end" as const,
-  },
-  sheet: {
-    backgroundColor: "#0B1713",
-    borderTopLeftRadius: 0,
-    borderTopRightRadius: 0,
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.10)",
-    paddingHorizontal: 16,
-    paddingTop: 14,
-    maxHeight: "100%" as const,
-    height: "100%" as const,
-  },
-  header: {
-    flexDirection: "row" as const,
-    alignItems: "center" as const,
-    justifyContent: "space-between" as const,
-    paddingBottom: 10,
-  },
-  title: { color: "#EAF2EE", fontSize: 16, fontWeight: "900" as const },
-  close: { color: "rgba(234,242,238,0.75)", fontSize: 18, fontWeight: "900" as const },
-
-  searchWrap: {
-    height: 44,
-    borderRadius: 999,
-    backgroundColor: "rgba(255,255,255,0.06)",
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.10)",
-    flexDirection: "row" as const,
-    alignItems: "center" as const,
-    paddingHorizontal: 12,
-    gap: 10,
-    marginBottom: 12,
-  },
-  searchIcon: { color: "rgba(234,242,238,0.65)" as const },
-  searchInput: { flex: 1, color: "#EAF2EE", fontSize: 14, fontWeight: "700" as const },
-
-  item: {
-    paddingVertical: 12,
-    paddingHorizontal: 12,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.10)",
-    backgroundColor: "rgba(255,255,255,0.04)",
-    flexDirection: "row" as const,
-    alignItems: "center" as const,
-    justifyContent: "space-between" as const,
-    marginBottom: 10,
-  },
-  itemActive: {
-    borderColor: "rgba(34,197,94,0.45)",
-    backgroundColor: "rgba(34,197,94,0.10)",
-  },
-  itemLabel: { color: "rgba(234,242,238,0.85)", fontSize: 14, fontWeight: "800" as const },
-  itemSub: { color: "rgba(234,242,238,0.55)", fontSize: 12, fontWeight: "600" as const },
-  check: { color: "#22C55E", fontSize: 16, fontWeight: "900" as const },
-};

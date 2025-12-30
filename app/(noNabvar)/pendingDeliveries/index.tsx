@@ -1,9 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { View, Text, ScrollView, Pressable, TextInput, RefreshControl, Alert } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { styles, MUTED, GREEN } from "../pendingLoanRequest/styles";
+import { styles, MUTED, GREEN } from "./styles";
 import { getDeliveriesToConfirm } from "@/src/api/rental";
 import { activeRentalDeliveriStatus } from "@/src/api/booking";
+import { createRentalchatRoom } from "@/src/api/chat";
+import { router } from "expo-router";
 
 
 type DeliveryAction = "DELIVER" | "CONFIRM";
@@ -13,6 +15,7 @@ type DeliveryItem = {
   title: string;
   requesterName: string;
   requesterLabel: string;
+  requesterId: number;
   start: string;
   end: string;
   days: number;
@@ -34,6 +37,7 @@ function mapApiToCard(item: any, action: DeliveryAction): DeliveryItem {
     id: item?.id,
     title: item?.game?.name ?? item?.game?.gameBdd?.translations?.[0]?.name ?? "Juego",
     requesterName: item?.user?.name ?? item?.requester?.name ?? "Usuario",
+    requesterId: item?.user?.id ?? item?.requester?.id ?? 0,
     requesterLabel: item?.game?.location?.name ?? item?.game?.owner?.name ?? "Personal",
     start: startDate?.toLocaleDateString("es-ES", { day: "2-digit", month: "short" }) ?? "--",
     end: endDate?.toLocaleDateString("es-ES", { day: "2-digit", month: "short" }) ?? "--",
@@ -78,6 +82,25 @@ export default function PendingDeliveriesScreen() {
   useEffect(() => {
     loadData();
   }, []);
+
+
+  async function goToRentalChat(data: DeliveryItem) {
+    try {
+      console.log(data)
+
+      const room = await createRentalchatRoom(data.requesterId, data.id)
+      console.log(room)
+      router.push({
+        pathname: "/(noNabvar)/conversationChat/[id]",
+        params: { id: room.id, title: data.title, roomId: room.roomId },
+      })
+
+    } catch (error) {
+      console.error("Error getting rental roolm", error);
+
+    }
+    return
+  }
 
   const handleAction = async (item: DeliveryItem) => {
     try {
@@ -164,7 +187,7 @@ export default function PendingDeliveriesScreen() {
               <View style={styles.actions}>
                 <Pressable
                   style={styles.rejectBtn}
-                  onPress={() => Alert.alert("Contactar", `Contactar con ${item.requesterName}`)}
+                  onPress={() => goToRentalChat(item)}
                 >
                   <Text style={styles.rejectText}>Contactar</Text>
                 </Pressable>

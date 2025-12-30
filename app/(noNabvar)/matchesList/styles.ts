@@ -76,5 +76,5 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 6,
   },
-  badgeText: { color: "#B7F7D0", fontSize: 11, fontWeight: "900" },
+  badgeText: { color: colors.mintSoft, fontSize: 11, fontWeight: "900" },
 });

@@ -79,7 +79,7 @@ export const styles = StyleSheet.create({
     backgroundColor: GREEN,
   },
   toggleText: { color: MUTED, fontSize: 12, fontWeight: "900" },
-  toggleTextActive: { color: "#052B1C" },
+  toggleTextActive: { color: colors.greenDark },
 
   statsRow: {
     paddingHorizontal: 18,
@@ -164,7 +164,7 @@ export const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 999,
   },
-  primaryBtnAltText: { color: "#B7F7D0", fontSize: 12, fontWeight: "900" },
+  primaryBtnAltText: { color: colors.mintSoft, fontSize: 12, fontWeight: "900" },
 
   secondaryBtn: {
     backgroundColor: "rgba(255,255,255,0.04)",

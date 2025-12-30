@@ -89,7 +89,7 @@ export const styles = StyleSheet.create({
     paddingVertical: 6,
     borderRadius: 999,
   },
-  star: { color: "#FBBF24", fontSize: 12 },
+  star: { color: colors.amber, fontSize: 12 },
   ratingText: { color: TEXT, fontSize: 12, fontWeight: "900" },
 
   catPill: {

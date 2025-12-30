@@ -115,7 +115,7 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
   saveText: {
-    color: "#052B1C",
+    color: colors.greenDark,
     fontSize: 16,
     fontWeight: "900",
   },

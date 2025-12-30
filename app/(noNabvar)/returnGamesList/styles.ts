@@ -7,7 +7,7 @@ export const BORDER = colors.border;
 export const TEXT = colors.text;
 export const MUTED = colors.muted;
 export const GREEN = colors.primary;
-export const GREEN_DARK = "#052B1C";
+export const GREEN_DARK = colors.greenDark;
 
 export const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: BG },
@@ -87,7 +87,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 6,
   },
-  badgeText: { color: "#B7F7D0", fontSize: 11, fontWeight: "900" },
+  badgeText: { color: colors.mintSoft, fontSize: 11, fontWeight: "900" },
   typeTag: {
     backgroundColor: "rgba(255,255,255,0.06)",
     borderWidth: 1,

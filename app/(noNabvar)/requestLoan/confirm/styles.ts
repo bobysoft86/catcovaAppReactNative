@@ -7,7 +7,7 @@ export const BORDER = colors.border;
 export const TEXT = colors.text;
 export const MUTED = colors.muted;
 export const GREEN = colors.primary;
-export const GREEN_DARK = "#052B1C";
+export const GREEN_DARK = colors.greenDark;
 
 export const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: BG },
@@ -43,7 +43,7 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     gap: 12,
   },
-  cover: { width: 64, height: 64, borderRadius: 14, backgroundColor: "#111" },
+  cover: { width: 64, height: 64, borderRadius: 14, backgroundColor: colors.ink },
   badge: {
     alignSelf: "flex-start",
     backgroundColor: "rgba(34,197,94,0.16)",
@@ -53,7 +53,7 @@ export const styles = StyleSheet.create({
     paddingVertical: 6,
     borderRadius: 999,
   },
-  badgeText: { color: "#B7F7D0", fontSize: 11, fontWeight: "900" },
+  badgeText: { color: colors.mintSoft, fontSize: 11, fontWeight: "900" },
   gameTitle: { color: TEXT, fontSize: 16, fontWeight: "900", marginTop: 4 },
   gameSub: { color: MUTED, fontSize: 12, fontWeight: "600", marginTop: 2 },
 

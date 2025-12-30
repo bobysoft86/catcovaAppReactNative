@@ -9,8 +9,8 @@ import { getUserData } from "@/src/storage/authStorage";
 import SelectSheet from "@/src/components/selectSheet";
 import { getUserPlayersAndOrganizations } from "@/src/api/user";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useTransitionProgress } from "react-native-screens";
 import { UserModel, UserTypeItem } from "@/src/models/user-model";
+import { API_BASE_URL } from "@/src/config/api";
 
 
 
@@ -24,7 +24,7 @@ export default function HomeScreen() {
     const [userTypeList, setUserTypesList] = useState<UserTypeItem[]>([]);
 
     const userTypeLabel = userTypeSelected?.name ?? "Selecciona tipo de usuario";
-
+    const userTypeAvatar = userTypeSelected?.avatar ?? "";
 
     const isUser = userTypeSelected?.type === "USER";
     const isPlayer = userTypeSelected?.type === "PLAYER";
@@ -111,6 +111,8 @@ function loadUserStaorageData(){
             <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
                 <Header
                     userTypeLabel={userTypeLabel}
+                    userTypeAvatar={userTypeAvatar}
+
                     onSelectType={() => setTypeOptionsSelectedOpen(true)}
                     onProfile={() => router.push("/profile")}
                 />
@@ -152,10 +154,12 @@ function loadUserStaorageData(){
 
 function Header({
     userTypeLabel,
+    userTypeAvatar,
     onSelectType,
     onProfile,
 }: {
     userTypeLabel: string;
+    userTypeAvatar:string,
     onSelectType: () => void;
     onProfile: () => void;
 }) {
@@ -166,7 +170,7 @@ function Header({
                     <View style={styles.avatarWrap}>
                         <Image
                             source={{
-                                uri: "https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=200&q=60",
+                                uri: API_BASE_URL + userTypeAvatar,
                             }}
                             style={styles.avatar}
                         />

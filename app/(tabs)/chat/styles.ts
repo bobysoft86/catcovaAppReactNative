@@ -109,7 +109,7 @@ export const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 999,
   },
-  footerBtnText: { color: "#B7F7D0", fontSize: 12, fontWeight: "900" },
+  footerBtnText: { color: colors.mintSoft, fontSize: 12, fontWeight: "900" },
 
   loadingWrap: {
     marginTop: 30,
@@ -127,5 +127,5 @@ export const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 999,
   },
-  retryText: { color: "#B7F7D0", fontSize: 12, fontWeight: "900" },
+  retryText: { color: colors.mintSoft, fontSize: 12, fontWeight: "900" },
 });

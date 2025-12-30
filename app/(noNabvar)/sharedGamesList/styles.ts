@@ -66,7 +66,7 @@ export const styles = StyleSheet.create({
   },
   toggleBtnActive: { backgroundColor: GREEN },
   toggleText: { color: MUTED, fontSize: 12, fontWeight: "900" },
-  toggleTextActive: { color: "#052B1C" },
+  toggleTextActive: { color: colors.greenDark },
 
   statsRow: { paddingHorizontal: 18, flexDirection: "row", gap: 12, marginBottom: 14 },
   statCard: { flex: 1, borderRadius: 18, borderWidth: 1, borderColor: BORDER, padding: 12 },
@@ -129,7 +129,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 10,
   },
-  ctaText: { color: "#052B1C", fontSize: 12, fontWeight: "900" },
+  ctaText: { color: colors.greenDark, fontSize: 12, fontWeight: "900" },
 
   ctaAlt: {
     backgroundColor: "rgba(255,255,255,0.06)",

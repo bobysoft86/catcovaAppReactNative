@@ -1,19 +1,17 @@
 import React, { useState } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
 import {
   View,
   Text,
-  StyleSheet,
   TextInput,
   Pressable,
   ScrollView,
   ActivityIndicator,
   Alert,
 } from "react-native";
-import { colors } from "@/src/theme/colors";
-import { spacing } from "@/src/theme/layout";
 import { login, signup } from "@/src/api/auth";
 import { router } from "expo-router";
+import { styles } from "./styles";
+import { spacing } from "@/src/theme/layout";
 
 export default function AuthScreen() {
   const [mode, setMode] = useState<"login" | "signup">("login");
@@ -37,7 +35,8 @@ export default function AuthScreen() {
       if (isLogin) {
         await login(email, password);// 👈 llama a la API de login
       } else {
-        await signup(name,phone, email, password);
+
+        await signup(name, email, password,phone,);
       }
 
       // En login/signup ya se guarda el token en AsyncStorage
@@ -58,7 +57,6 @@ export default function AuthScreen() {
   };
 
   return (
-
     <ScrollView
       contentContainerStyle={styles.scrollContent}
       keyboardShouldPersistTaps="handled"
@@ -231,173 +229,3 @@ export default function AuthScreen() {
     </ScrollView>
   );
 }
-
-// estilos igual que ya tenías
-const CARD_BG = "#020917";
-const CARD_GRADIENT = "#020617";
-
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: colors?.background || "#020617",
-  },
-  scrollContent: {
-    flexGrow: 1,
-    padding: spacing.lg,
-    justifyContent: "center",
-  },
-  card: {
-    borderRadius: 32,
-    padding: spacing.lg,
-    backgroundColor: CARD_BG,
-    borderWidth: 1,
-    borderColor: "rgba(148, 163, 184, 0.15)",
-    shadowColor: "#000",
-    shadowOpacity: 0.45,
-    shadowRadius: 20,
-    shadowOffset: { width: 0, height: 10 },
-    elevation: 10,
-  },
-  header: {
-    marginBottom: spacing.lg,
-  },
-  betaBadge: {
-    alignSelf: "flex-end",
-    backgroundColor: "#064E3B",
-    paddingHorizontal: spacing.sm,
-    paddingVertical: 4,
-    borderRadius: 999,
-  },
-  betaText: {
-    color: "#6EE7B7",
-    fontSize: 10,
-    fontWeight: "600",
-  },
-  brandBlock: {
-    marginTop: spacing.md,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  logoCircle: {
-    width: 46,
-    height: 46,
-    borderRadius: 23,
-    backgroundColor: "#022C22",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  logoDice: {
-    fontSize: 24,
-  },
-  brand: {
-    color: "#F9FAFB",
-    fontSize: 24,
-    fontWeight: "700",
-  },
-  subtitle: {
-    color: "#9CA3AF",
-    fontSize: 12,
-    marginTop: 2,
-  },
-  toggleWrapper: {
-    flexDirection: "row",
-    backgroundColor: "#020617",
-    borderRadius: 999,
-    padding: 4,
-    marginBottom: spacing.lg,
-    borderWidth: 1,
-    borderColor: "rgba(148, 163, 184, 0.25)",
-  },
-  toggleButton: {
-    flex: 1,
-    paddingVertical: spacing.sm + 2,
-    borderRadius: 999,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  toggleButtonActive: {
-    backgroundColor: "#111827",
-  },
-  toggleText: {
-    color: "#9CA3AF",
-    fontSize: 14,
-    fontWeight: "500",
-  },
-  toggleTextActive: {
-    color: "#F9FAFB",
-    fontWeight: "600",
-  },
-  form: {
-    gap: spacing.md,
-  },
-  inputGroup: {},
-  label: {
-    color: "#E5E7EB",
-    fontSize: 12,
-    marginBottom: 4,
-  },
-  inputWrapper: {
-    backgroundColor: "#020617",
-    borderRadius: 999,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    borderWidth: 1,
-    borderColor: "rgba(55, 65, 81, 0.9)",
-  },
-  input: {
-    color: "#F9FAFB",
-    fontSize: 14,
-  },
-  forgotWrapper: {
-    marginTop: 4,
-    alignSelf: "flex-end",
-  },
-  forgotText: {
-    color: "#9CA3AF",
-    fontSize: 12,
-  },
-  primaryButton: {
-    marginTop: spacing.md,
-    backgroundColor: "#22C55E",
-    borderRadius: 999,
-    paddingVertical: spacing.sm + 4,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  primaryButtonText: {
-    color: "#022C22",
-    fontSize: 16,
-    fontWeight: "700",
-  },
-  socialRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: spacing.lg,
-    marginBottom: spacing.sm,
-  },
-  socialButton: {
-    flex: 1,
-    height: 46,
-    borderRadius: 999,
-    backgroundColor: "#020617",
-    borderWidth: 1,
-    borderColor: "#1F2937",
-    alignItems: "center",
-    justifyContent: "center",
-    marginHorizontal: 4,
-  },
-  socialText: {
-    color: "#F9FAFB",
-    fontSize: 18,
-    fontWeight: "600",
-  },
-  termsText: {
-    color: "#6B7280",
-    fontSize: 11,
-    textAlign: "center",
-  },
-  link: {
-    color: "#A7F3D0",
-    textDecorationLine: "underline",
-  },
-});

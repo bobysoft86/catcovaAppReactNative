@@ -32,8 +32,8 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: BORDER,
   },
-  iconText: { color: "#EAF2EE", fontSize: 18, fontWeight: "900" },
-  h1: { color: "#EAF2EE", fontSize: 20, fontWeight: "900" },
+  iconText: { color: colors.textSoft, fontSize: 18, fontWeight: "900" },
+  h1: { color: colors.textSoft, fontSize: 20, fontWeight: "900" },
   searchWrap: {
     flexDirection: "row",
     alignItems: "center",
@@ -47,7 +47,7 @@ export const styles = StyleSheet.create({
     marginBottom: 12,
   },
   searchIcon: { color: "rgba(234,242,238,0.65)", marginRight: 10 },
-  searchInput: { flex: 1, color: "#EAF2EE", fontSize: 14, fontWeight: "700" },
+  searchInput: { flex: 1, color: colors.textSoft, fontSize: 14, fontWeight: "700" },
   list: {
     paddingHorizontal: 16,
     paddingBottom: 24,
@@ -66,9 +66,9 @@ export const styles = StyleSheet.create({
     width: 72,
     height: 72,
     borderRadius: 12,
-    backgroundColor: "#0D1A16",
+    backgroundColor: colors.surfaceMuted,
   },
-  cardTitle: { color: "#EAF2EE", fontSize: 15, fontWeight: "800" },
+  cardTitle: { color: colors.textSoft, fontSize: 15, fontWeight: "800" },
   cardSub: { color: "rgba(234,242,238,0.75)", marginTop: 4 },
   emptyWrap: {
     alignItems: "center",

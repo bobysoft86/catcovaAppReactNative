@@ -1,8 +1,7 @@
 // src/components/AppCard.tsx
-import React, { ReactNode } from 'react';
-import { View, Text, StyleSheet, ViewStyle } from 'react-native';
-import { colors } from '../theme/colors';
-import { radius, spacing } from '../theme/layout';
+import React, { ReactNode } from "react";
+import { View, Text, ViewStyle } from "react-native";
+import { styles } from "./appCard.styles";
 
 interface AppCardProps {
   title?: string;
@@ -24,26 +23,3 @@ export default function AppCard({ title, subtitle, style, children }: AppCardPro
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  card: {
-    backgroundColor: colors.card,
-    borderRadius: radius.lg,
-    padding: spacing.md,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  header: {
-    marginBottom: spacing.sm,
-  },
-  title: {
-    color: colors.text,
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  subtitle: {
-    color: colors.muted,
-    fontSize: 12,
-    marginTop: 2,
-  },
-});

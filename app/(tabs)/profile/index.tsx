@@ -6,14 +6,16 @@ import { router } from "expo-router";
 import { styles } from "./styles";
 import EditNameModal from "@/src/components/EditNameModal";
 import { getUserProfile /*, updateUserName */ } from "@/src/api/user";
-import { getUserData, removeToken } from "@/src/storage/authStorage";
-import { User } from "@/src/api/auth";
+import { getUserData, removeLoginData, removeMatrixData, removeToken, removeUserData } from "@/src/storage/authStorage";
+import { UserModel } from "@/src/models/user-model";
+import { API_BASE_URL } from "@/src/config/api";
+
 
 export default function ProfileScreen() {
   const insets = useSafeAreaInsets();
 
   const [editOpen, setEditOpen] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<UserModel | null>(null);
   const [profileData, setProfileData] = useState<any>(null);
   const [savingName, setSavingName] = useState(false);
   const [loadingProfile, setLoadingProfile] = useState(true);
@@ -24,7 +26,7 @@ export default function ProfileScreen() {
         let mounted = true;
 
         (async () => {
-            const u = await getUserData<User>();
+            const u = await getUserData<UserModel>();
             if (mounted) setUser(u);
         })();
         return () => {
@@ -51,7 +53,7 @@ export default function ProfileScreen() {
   }, []);
 
   const onLogout = async () => {
-    await removeToken();
+    await removeLoginData();
     router.replace("/");
   };
 
@@ -88,7 +90,7 @@ export default function ProfileScreen() {
           <View style={styles.avatarWrap}>
             <Image
               source={{
-                uri: "https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=240&q=60",
+                uri: user?.avatar ?`${API_BASE_URL}${user.avatar}`  :  "" ,
               }}
               style={styles.avatar}
             />
@@ -278,7 +280,7 @@ export default function ProfileScreen() {
             // ✅ aquí llamas a tu API real
             // await updateUserName(newName);
 
-            setUser((prev) => (prev ? { ...prev, name: newName } : { name: newName } as User));
+            setUser((prev) => (prev ? { ...prev, name: newName } : { name: newName } as UserModel));
             setEditOpen(false);
           } catch (e) {
             console.error(e);

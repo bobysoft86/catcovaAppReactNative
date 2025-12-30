@@ -7,7 +7,7 @@ export const BORDER = colors.border;
 export const TEXT = colors.text;
 export const MUTED = colors.muted;
 export const GREEN = colors.primary;
-export const GREEN_DARK = "#052B1C";
+export const GREEN_DARK = colors.greenDark;
 
 export const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: BG },

@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   View,
   Text,
-  StyleSheet,
   FlatList,
   TextInput,
   Pressable,
@@ -14,6 +13,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { colors } from "@/src/theme/colors";
 import { useMatrix } from "@/src/matrix/matrixProvider";
+import { styles } from "./styles";
 
 type EventLike = any;
 
@@ -37,7 +37,7 @@ export default function ChatDetailScreen() {
     if (params?.title && String(params.title).trim().length) return String(params.title);
     return params?.roomId ?? "Chat";
   }, [params?.title, params?.roomId]);
-  const roomId = typeof params?.roomId === "string" ? params.roomId : "";
+const roomId = typeof params?.roomId === "string" ? params.roomId : "";
 
   useEffect(() => {
     if (!client || !roomId) return;
@@ -200,76 +200,3 @@ export default function ChatDetailScreen() {
     </KeyboardAvoidingView>
   );
 }
-
-const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: colors.background },
-  header: {
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.card,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 12,
-  },
-  backBtn: {
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 999,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    backgroundColor: colors.greenDark,
-  },
-  backText: { color: colors.text, fontWeight: "700", fontSize: 12 },
-  headerText: { flex: 1 },
-  title: { color: colors.text, fontSize: 16, fontWeight: "800" },
-  subtitle: { color: colors.muted, fontSize: 12, marginTop: 2 },
-  list: { padding: 16, gap: 10 },
-  bubble: {
-    padding: 10,
-    borderRadius: 14,
-    borderWidth: 1,
-  },
-  bubbleMine: {
-    alignSelf: "flex-end",
-    borderColor: colors.primary,
-    backgroundColor: colors.greenDark,
-  },
-  bubbleOther: {
-    alignSelf: "flex-start",
-    borderColor: colors.border,
-    backgroundColor: colors.card,
-  },
-  sender: { color: colors.accent, fontSize: 11, fontWeight: "700", marginBottom: 4 },
-  body: { color: colors.text, fontSize: 14 },
-  empty: { alignItems: "center", marginTop: 40 },
-  emptyText: { color: colors.muted, fontSize: 12, fontWeight: "600" },
-  inputRow: {
-    flexDirection: "row",
-    gap: 8,
-    padding: 12,
-    borderTopWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.card,
-  },
-  input: {
-    flex: 1,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 12,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    color: colors.text,
-    backgroundColor: colors.background,
-  },
-  sendBtn: {
-    paddingHorizontal: 14,
-    justifyContent: "center",
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: colors.primary,
-    backgroundColor: colors.primary,
-  },
-  sendText: { fontWeight: "800", color: colors.background },
-});

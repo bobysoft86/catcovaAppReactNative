@@ -10,7 +10,7 @@ import {
   ActivityIndicator,
   Alert,
 } from "react-native";
-import { colors } from "@/src/theme/colors";
+import { styles } from "./EditNameModal.styles";
 
 type Props = {
   visible: boolean;
@@ -95,82 +95,4 @@ export default function EditNameModal({
     </Modal>
   );
 }
-
-export const BG = colors.background;
-export const CARD = colors.card;
-export const BORDER = colors.border;
-export const TEXT = colors.text;
-export const MUTED = colors.muted;
-export const GREEN = colors.primary;
-
-const styles = {
-  backdrop: {
-    position: "absolute" as const,
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    backgroundColor: "rgba(0,0,0,0.55)",
-  },
-  wrapper: {
-    flex: 1,
-    justifyContent: "flex-end" as const,
-  },
-  sheet: {
-    backgroundColor: BG,
-    borderTopLeftRadius: 22,
-    borderTopRightRadius: 22,
-    borderWidth: 1,
-    borderColor: BORDER,
-    paddingHorizontal: 16,
-    paddingTop: 14,
-    paddingBottom: 16,
-  },
-  header: {
-    flexDirection: "row" as const,
-    alignItems: "center" as const,
-    justifyContent: "space-between" as const,
-    paddingBottom: 10,
-  },
-  title: { color: TEXT, fontSize: 16, fontWeight: "900" as const },
-  close: { color: MUTED, fontSize: 18, fontWeight: "900" as const },
-
-  label: { color: MUTED, fontSize: 12, fontWeight: "700" as const, marginTop: 6 },
-  input: {
-    marginTop: 6,
-    backgroundColor: "rgba(0,0,0,0.25)",
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: BORDER,
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-    color: TEXT,
-    fontSize: 14,
-    fontWeight: "700" as const,
-  },
-
-  actions: {
-    flexDirection: "row" as const,
-    gap: 12,
-    marginTop: 14,
-  },
-  btnSecondary: {
-    flex: 1,
-    borderRadius: 999,
-    paddingVertical: 13,
-    alignItems: "center" as const,
-    borderWidth: 1,
-    borderColor: BORDER,
-    backgroundColor: CARD,
-  },
-  btnSecondaryText: { color: TEXT, fontSize: 14, fontWeight: "900" as const },
-
-  btnPrimary: {
-    flex: 1,
-    borderRadius: 999,
-    paddingVertical: 13,
-    alignItems: "center" as const,
-    backgroundColor: GREEN,
-  },
-  btnPrimaryText: { color: "#052B1C", fontSize: 14, fontWeight: "900" as const },
-};
+export { BG, CARD, BORDER, TEXT, MUTED, GREEN } from "./EditNameModal.styles";

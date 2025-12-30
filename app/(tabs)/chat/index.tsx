@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { View, Text, TextInput, Pressable, FlatList, Image, ActivityIndicator } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import api from "@/src/api/client";
 import { getUserData } from "@/src/storage/authStorage";
 import { styles } from "./styles";
 import { router, useRouter } from "expo-router";
@@ -227,7 +226,7 @@ function ChatItem({ item }: { item: ChatRow }) {
       <View style={{ flex: 1 }}>
         <View style={styles.topRow}>
           <Text style={styles.name} numberOfLines={1}>
-            {item.title}
+            {item.title} / {}
           </Text>
           <Text style={styles.time}>{item.time}</Text>
         </View>

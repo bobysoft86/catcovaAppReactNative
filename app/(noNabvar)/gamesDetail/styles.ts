@@ -59,7 +59,7 @@ export const styles = StyleSheet.create({
     paddingVertical: 6,
     borderRadius: 999,
   },
-  badgeText: { color: "#B7F7D0", fontSize: 11, fontWeight: "900" },
+  badgeText: { color: colors.mintSoft, fontSize: 11, fontWeight: "900" },
 
   title: { color: TEXT, fontSize: 26, fontWeight: "900", marginTop: 2 },
   subtitle: { color: MUTED, fontSize: 12, fontWeight: "600" },
@@ -152,7 +152,7 @@ export const styles = StyleSheet.create({
     paddingVertical: 6,
     borderRadius: 999,
   },
-  infoTagText: { color: "#B7F7D0", fontSize: 11, fontWeight: "900" },
+  infoTagText: { color: colors.mintSoft, fontSize: 11, fontWeight: "900" },
 
   lenderCard: {
     backgroundColor: CARD,
@@ -216,7 +216,7 @@ export const styles = StyleSheet.create({
   borderRadius: 999,
 },
 tagText: {
-  color: "#B7F7D0",
+  color: colors.mintSoft,
   fontSize: 12,
   fontWeight: "900",
 },
@@ -233,6 +233,6 @@ tagTextMuted: {
   fontSize: 12,
   fontWeight: "800",
 },
-  ctaText: { color: "#052B1C", fontSize: 16, fontWeight: "900" },
-  ctaArrow: { color: "#052B1C", fontSize: 18, fontWeight: "900" },
+  ctaText: { color: colors.greenDark, fontSize: 16, fontWeight: "900" },
+  ctaArrow: { color: colors.greenDark, fontSize: 18, fontWeight: "900" },
 });

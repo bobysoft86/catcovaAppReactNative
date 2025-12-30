@@ -4,7 +4,8 @@ export interface UserModel {
   credit: number;
   email: string;
   role: string;
-  matrixId?:string
+  matrixId?:string;
+  avatar: string
 }
 
 
@@ -12,6 +13,7 @@ export interface UserTypeItem  {
     id: number;
     name: string;
     role: string;
+    avatar:string;
     originalId:number;
     type: "USER" | "PLAYER" | "ORG" | "CUSTOMER";
 };

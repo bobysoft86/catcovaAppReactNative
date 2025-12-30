@@ -7,7 +7,7 @@ export const BORDER = colors.border;
 export const TEXT = colors.text;
 export const MUTED = colors.muted;
 export const GREEN = colors.primary;
-export const GREEN_DARK = "#052B1C";
+export const GREEN_DARK = colors.greenDark;
 
 export const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: BG },
@@ -103,7 +103,7 @@ export const styles = StyleSheet.create({
     borderRadius: 999,
     marginBottom: 6,
   },
-  pillText: { color: "#B7F7D0", fontSize: 12, fontWeight: "800" },
+  pillText: { color: colors.mintSoft, fontSize: 12, fontWeight: "800" },
   heroTitle: { color: TEXT, fontSize: 22, fontWeight: "900" },
   heroSub: { color: MUTED, fontSize: 13 },
   heroLink: {
@@ -134,7 +134,7 @@ export const styles = StyleSheet.create({
     borderRadius: 22,
     padding: 14,
   },
-  loanImg: { width: 46, height: 46, borderRadius: 16, backgroundColor: "#111" },
+  loanImg: { width: 46, height: 46, borderRadius: 16, backgroundColor: colors.ink },
   loanTitle: { color: TEXT, fontSize: 14, fontWeight: "800" },
   loanMeta: { flexDirection: "row", alignItems: "center", gap: 6, marginTop: 4 },
   clock: { fontSize: 12 },
@@ -176,6 +176,6 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "rgba(34,197,94,0.30)",
   },
-  actionIconText: { fontSize: 24, fontWeight: "900", color: "#052B1C" },
-  actionText: { fontSize: 18, fontWeight: "900", color: "#052B1C" },
+  actionIconText: { fontSize: 24, fontWeight: "900", color: colors.greenDark },
+  actionText: { fontSize: 18, fontWeight: "900", color: colors.greenDark },
 });
