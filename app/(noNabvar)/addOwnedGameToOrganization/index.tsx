@@ -14,12 +14,13 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { styles, GREEN, MUTED, TEXT } from "./styles";
 import { getUserData } from "@/src/storage/authStorage";
-import { User } from "@/src/api/auth";
+
 import { getOwnedGamesMeta, listOwnedGames, updateOwnedGame } from "@/src/api/ownedGames";
 import { GameBdd, OwnedGame } from "@/src/models/game-model";
 import { getAllGamesBdd } from "@/src/api/games";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { UserTypeItem } from "@/src/models/user-model";
+import { UserModel, UserTypeItem } from "@/src/models/user-model";
+import BasicHeader from "@/src/components/basicHeader/basicHeader";
 
 
 export default function addOwnedGameToOrganization() {
@@ -41,7 +42,7 @@ export default function addOwnedGameToOrganization() {
   const [statusId, setStatusId] = useState<number | null>(null);
   const [valueEur, setValueEur] = useState("0");
   const [userTypeSelected, setUserType] = useState<UserTypeItem | null>(null);
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<UserModel | null>(null);
   
   const twoCols = width >= 420;
 
@@ -68,7 +69,7 @@ const USER_TYPE_SELECTED_KEY = "user_type_selected";
     let mounted = true;
 
     (async () => {
-      const u = await getUserData<User>();
+      const u = await getUserData<UserModel>();
       if (mounted) setUser(u);
         try {
                 const stored = await AsyncStorage.getItem(USER_TYPE_SELECTED_KEY);
@@ -158,15 +159,11 @@ const USER_TYPE_SELECTED_KEY = "user_type_selected";
   };
 
   return (
-    <View style={[styles.screen, { paddingTop: insets.top }]}>
+    <View style={[styles.screen, { paddingTop: insets.top +50 }]}>
       {/* Header */}
-      <View style={styles.header}>
-        <Pressable onPress={() => router.back()} hitSlop={10}>
-          <Text style={styles.back}>←</Text>
-        </Pressable>
-        <Text style={styles.title}>Añadir juego</Text>
-        <View style={{ width: 24 }} />
-      </View>
+      <BasicHeader
+      headerText="AÑADIR JUEGO A ORGANIZACION"
+      ></BasicHeader>
 
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
         <View style={styles.card}>

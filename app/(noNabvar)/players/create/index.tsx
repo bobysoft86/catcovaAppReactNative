@@ -7,6 +7,7 @@ import { User } from "@/src/api/auth";
 
 import { styles, MUTED } from "./styles";
 import { createPlayer } from "@/src/api/player";
+import BasicHeader from "@/src/components/basicHeader/basicHeader";
 
 export default function CreatePlayerScreen() {
   const insets = useSafeAreaInsets();
@@ -50,14 +51,12 @@ export default function CreatePlayerScreen() {
   };
 
   return (
-    <View style={[styles.screen, { paddingTop: insets.top }]}>
-      <View style={styles.header}>
-        <Pressable onPress={() => router.back()} hitSlop={10}>
-          <Text style={styles.back}>←</Text>
-        </Pressable>
-        <Text style={styles.title}>Crear player</Text>
-        <View style={{ width: 24 }} />
-      </View>
+    <View style={[styles.screen, { paddingTop: insets.top + 50 }]}>
+  <BasicHeader
+  headerText="CREAR JUGADOR"
+  >
+
+  </BasicHeader>
 
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
         <View style={styles.card}>

@@ -16,6 +16,7 @@ import { myOwnedGamesList } from "@/src/api/ownedGames";
 import { getMyWishedGames } from "@/src/api/wishedGame";
 import { RentalModel } from "@/src/models/rental";
 import { WishedGameModel } from "@/src/models/wishedGameModel";
+import BasicHeader from "@/src/components/basicHeader/basicHeader";
 
 type Mode = "owned" | "wishlist";
 type Status = "available" | "rented" | "booked" | "pending";
@@ -47,59 +48,6 @@ export default function MyGamesScreen() {
   const [wishedGames, setwishedGames] = useState<WishedGameModel[]>()
 
   const isOwned = mode === "owned";
-
-  // Mock visual (lo cambias luego por API: ownedGames / wishlistGames)
-  // const ownedGames = useMemo<MyGameCard[]>(
-  //   () => [
-  //     {
-  //       id: "1",
-  //       title: "Catan",
-  //       image:
-  //         "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1200&q=60",
-  //       playersText: "3-4 Jugadores",
-  //       durationText: "60-90 min",
-  //       tagLabel: "DISPONIBLE",
-  //       tagVariant: "available",
-  //       location: "Estantería A",
-  //     },
-  //     {
-  //       id: "2",
-  //       title: "Wingspan",
-  //       image:
-  //         "https://images.unsplash.com/photo-1520975958225-6b0f74b4b2b0?auto=format&fit=crop&w=1200&q=60",
-  //       playersText: "1-5 Jugadores",
-  //       durationText: "40-70 min",
-  //       tagLabel: "PRESTADO",
-  //       tagVariant: "loaned",
-  //       lender: "María G.",
-  //     },
-  //     {
-  //       id: "3",
-  //       title: "Ticket to Ride",
-  //       image:
-  //         "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=60",
-  //       playersText: "2-5 Jugadores",
-  //       durationText: "30-60 min",
-  //       tagLabel: "DISPONIBLE",
-  //       tagVariant: "available",
-  //       location: "Armario Salón",
-  //     },
-  //     {
-  //       id: "4",
-  //       title: "Scythe",
-  //       image:
-  //         "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=60",
-  //       playersText: "1-5 Jugadores",
-  //       durationText: "115 min",
-  //       tagLabel: "ED. COLECCIONISTA",
-  //       tagVariant: "collectors",
-  //       location: "Caja grande",
-  //     },
-  //   ],
-  //   []
-  // );
-
-
   useEffect(() => {
 
     const fetchOwnedGamesData = async () => {
@@ -127,56 +75,6 @@ export default function MyGamesScreen() {
     fetchWishedGamesData();
   }, []);
 
-  // const wishlistData = useMemo<MyGameCard[]>(
-  //   () => [
-  //     {
-  //       id: "w1",
-  //       title: "Wingspan Asia",
-  //       image:
-  //         "https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=1200&q=60",
-  //       playersText: "1-2 Jugadores",
-  //       durationText: "45 min",
-  //       tagLabel: "CAMBIO DISPONIBLE",
-  //       tagVariant: "available",
-  //       priceText: "45€",
-  //     },
-  //     {
-  //       id: "w2",
-  //       title: "Ticket to Ride: Legacy",
-  //       image:
-  //         "https://images.unsplash.com/photo-1520975958225-6b0f74b4b2b0?auto=format&fit=crop&w=1200&q=60",
-  //       playersText: "2-5 Jugadores",
-  //       durationText: "60-90 min",
-  //       tagLabel: "PRÓXIMAMENTE",
-  //       tagVariant: "soon",
-  //       releaseText: "NOV 2024",
-  //     },
-  //     {
-  //       id: "w3",
-  //       title: "Catan: Starfarers",
-  //       image:
-  //         "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1200&q=60",
-  //       playersText: "3-4 Jugadores",
-  //       durationText: "90 min",
-  //       tagLabel: "DISPONIBLE",
-  //       tagVariant: "available",
-  //       priceText: "89€",
-  //     },
-  //     {
-  //       id: "w4",
-  //       title: "Scythe: Fenris",
-  //       image:
-  //         "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=60",
-  //       playersText: "1-7 Jugadores",
-  //       durationText: "45€",
-  //       tagLabel: "EXPANSIÓN",
-  //       tagVariant: "expansion",
-  //       priceText: "45€",
-  //     },
-  //   ],
-  //   []
-  // );
-
   const raw = isOwned ? ownedGames : wishedGames;
 
 
@@ -199,23 +97,14 @@ export default function MyGamesScreen() {
   }, [isOwned, ownedGames, wishedGames]);
 
   return (
-    <View style={[screen, { paddingTop: insets.top + 8 }]}>
+    <View style={[screen, { paddingTop: insets.top + 60 }]}>
       {/* Header */}
-      <View style={headerRow}>
-        <Pressable onPress={() => router.back()} style={iconBtn} hitSlop={10}>
-          <Text style={styles.iconText}>←</Text>
-        </Pressable>
+      <BasicHeader
+      headerText="MIS JUEGOS"
+      icon = "+"
+      onRightPress={() => router.push("/(noNabvar)/games/createOwnGame")}
 
-        <Text style={styles.h1}>Mis Juegos</Text>
-
-        <Pressable
-          onPress={() => router.push("/(noNabvar)/games/createOwnGame")}
-          style={styles.plusBtn}
-          hitSlop={10}
-        >
-          <Text style={styles.plusText}>＋</Text>
-        </Pressable>
-      </View>
+            ></BasicHeader>
 
       {/* Search */}
       <View style={styles.searchWrap}>

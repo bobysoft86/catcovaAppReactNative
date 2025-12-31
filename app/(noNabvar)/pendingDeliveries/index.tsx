@@ -6,6 +6,7 @@ import { getDeliveriesToConfirm } from "@/src/api/rental";
 import { activeRentalDeliveriStatus } from "@/src/api/booking";
 import { createRentalchatRoom } from "@/src/api/chat";
 import { router } from "expo-router";
+import BasicHeader from "@/src/components/basicHeader/basicHeader";
 
 
 type DeliveryAction = "DELIVER" | "CONFIRM";
@@ -113,18 +114,21 @@ export default function PendingDeliveriesScreen() {
   };
 
   return (
-    <View style={[styles.screen, { paddingTop: insets.top }]}>
+    <View style={[styles.screen, { paddingTop: insets.top +50 }]}>
+     
+        <BasicHeader
+           headerText="ENTREGAS"
+           icon="SYNC"
+           onRightPress={()=>loadData()}
+
+           ></BasicHeader>
+     
       <ScrollView
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={loadData} tintColor={GREEN} />}
         contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 20 }]}
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.header}>
-          <Text style={styles.h1}>Entregas</Text>
-          <Pressable style={styles.bell} onPress={loadData}>
-            <Text style={styles.bellText}>SYNC</Text>
-          </Pressable>
-        </View>
+     
 
         <View style={styles.search}>
           <Text style={{ color: MUTED }}>🔍</Text>

@@ -3,9 +3,11 @@ import { View, Text, ScrollView, Pressable, TextInput, RefreshControl, Alert } f
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { styles, MUTED, GREEN } from "./styles";
 import { completeRental, getReturnsToConfirm } from "@/src/api/rental";
-import { User } from "@/src/api/auth";
+
 import { getUserData } from "@/src/storage/authStorage";
 import { RentalModel } from "@/src/models/rental";
+import { UserModel } from "@/src/models/user-model";
+import BasicHeader from "@/src/components/basicHeader/basicHeader";
 
 type ReturnItem = {
   id: number;
@@ -19,7 +21,7 @@ type ReturnItem = {
   createdAgo?: string;
 };
 
-function mapApi(item: RentalModel, userLogged: User | null, isOrg?:boolean): ReturnItem {
+function mapApi(item: RentalModel, userLogged: UserModel | null, isOrg?:boolean): ReturnItem {
   console.log("data",
     isOrg,userLogged,item
   )
@@ -56,7 +58,7 @@ export default function ReturnGamesListScreen() {
   const [query, setQuery] = useState("");
   const [refreshing, setRefreshing] = useState(false);
   const [approvedCount, setApprovedCount] = useState(0);
-  const [userLogged, setUserLogged] = useState<User | null>(null);
+  const [userLogged, setUserLogged] = useState<UserModel | null>(null);
 
   const filtered = useMemo(() => {
     if (!query.trim()) return items;
@@ -88,7 +90,7 @@ export default function ReturnGamesListScreen() {
   useEffect(() => {
     let mounted = true;
     (async () => {
-      const u = await getUserData<User>();
+      const u = await getUserData<UserModel>();
       if (!mounted) return;
       setUserLogged(u);
     })();
@@ -113,18 +115,19 @@ export default function ReturnGamesListScreen() {
   };
 
   return (
-    <View style={[styles.screen, { paddingTop: insets.top }]}>
+    <View style={[styles.screen, { paddingTop: insets.top + 50 }]}>
+    
+    
+       <BasicHeader
+          headerText="DEVOLUCIONES"
+          icon="SYNC"
+          ></BasicHeader>
       <ScrollView
         contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 20 }]}
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={loadData} tintColor={GREEN} />}
       >
-        <View style={styles.header}>
-          <Text style={styles.h1}>Devoluciones</Text>
-          <Pressable style={styles.bell} onPress={loadData}>
-            <Text style={styles.bellText}>🔔</Text>
-          </Pressable>
-        </View>
+      
 
         <View style={styles.search}>
           <Text style={{ color: MUTED }}>🔍</Text>

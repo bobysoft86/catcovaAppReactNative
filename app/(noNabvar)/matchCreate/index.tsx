@@ -10,6 +10,7 @@ import { getAllPlayers } from "@/src/api/player";
 import { Player } from "@/src/models/player-model";
 import { createMatch } from "@/src/api/match";
 import { MatchCreatePayload } from "@/src/models/match-model";
+import BasicHeader from "@/src/components/basicHeader/basicHeader";
 
 
 export default function MatchCreateScreen() {
@@ -113,15 +114,14 @@ if(!winner || !gameBddId ||!rounds||!selectedPlayers||!description){
   }
 
   return (
-    <View style={[styles.screen, { paddingTop: insets.top }]}>
+    <View style={[styles.screen, { paddingTop: insets.top + 50 }]}>
+       {/* Header */}
+          <BasicHeader
+          headerText="REGISTRO DE PARTIDA"
+          ></BasicHeader>
+    
       <ScrollView contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 24 }]} showsVerticalScrollIndicator={false}>
-        <View style={styles.header}>
-          <Pressable style={styles.backBtn} onPress={() => router.back()} hitSlop={10}>
-            <Text style={styles.backText}>×</Text>
-          </Pressable>
-          <Text style={styles.title}>Registro de Partidas</Text>
-          <View style={styles.spacer} />
-        </View>
+    
 
         <View style={styles.sectionCard}>
           <Text style={styles.label}>JUEGO SELECCIONADO</Text>

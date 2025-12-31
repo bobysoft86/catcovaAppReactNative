@@ -15,6 +15,8 @@ export interface UserTypeItem  {
     role: string;
     avatar:string;
     originalId:number;
+    matchesPlayed:number
+    matchesPlayedlastMonth:number
     type: "USER" | "PLAYER" | "ORG" | "CUSTOMER";
 };
 

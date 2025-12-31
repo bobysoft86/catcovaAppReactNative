@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import { styles, GREEN } from "./styles";
+import BasicHeader from "@/src/components/basicHeader/basicHeader";
 
 type Mode = "lent" | "borrowed";
 type LoanStatus = "ontime" | "late" | "soon" | "long";
@@ -110,20 +111,13 @@ export default function LoansScreen() {
   }, [raw]);
 
   return (
-    <View style={[styles.screen, { paddingTop: insets.top + 8 }]}>
+    <View style={[styles.screen, { paddingTop: insets.top + 50 }]}>
       {/* Header */}
-      <View style={styles.headerRow}>
-        
-          <Pressable onPress={() => router.back()} style={styles.iconBtn} hitSlop={10}>
-                  <Text style={styles.iconText}>←</Text>
-                </Pressable>
-        
-        <Text style={styles.h1}>Préstamos</Text>
+   <BasicHeader
+   headerText="PRESTAMOS"
+   >
 
-        <Pressable onPress={() => console.log("filters")} style={styles.iconBtn} hitSlop={10}>
-          <Text style={styles.iconText}>≡</Text>
-        </Pressable>
-      </View>
+   </BasicHeader>
 
       {/* Search */}
       <View style={styles.searchWrap}>

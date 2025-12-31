@@ -5,6 +5,7 @@ import { useLocalSearchParams, router } from "expo-router";
 import { getOrganizationGameList } from "@/src/api/organization";
 import { styles } from "./styles";
 import { OwnedGame } from "@/src/models/game-model";
+import BasicHeader from "@/src/components/basicHeader/basicHeader";
 
 
 
@@ -20,11 +21,6 @@ export default function OrganizationGamesList() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isMounted, setIsMounted]=useState(true); 
-
-  const goBackSafe = () => {
-    if (router.canGoBack()) router.back();
-    else router.replace("/home"); // ajusta a tu ruta real
-  };
 
 
   useEffect(() => {
@@ -62,15 +58,12 @@ export default function OrganizationGamesList() {
   }, [games, query]);
 
   return (
-    <View style={[styles.screen, { paddingTop: insets.top + 8 }]}>
-      <View style={styles.headerRow}>
-        <Pressable onPress={goBackSafe} style={styles.iconBtn} hitSlop={10}>
-          <Text style={styles.iconText}>←</Text>
-        </Pressable>
+    <View style={[styles.screen, { paddingTop: insets.top + 50 }]}>
+         {/* Header */}
+            <BasicHeader
+            headerText="JUEGOS EN DEPOSITO"
 
-        <Text style={styles.h1}>Juegos en depósito</Text>
-        <View style={{ width: 32 }} />
-      </View>
+            ></BasicHeader>
 
       <View style={styles.searchWrap}>
         <Text style={styles.searchIcon}>🔎</Text>

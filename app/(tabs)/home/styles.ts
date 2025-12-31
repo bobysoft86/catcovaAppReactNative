@@ -149,6 +149,19 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+basicCard:{
+    flexDirection: "row",
+    justifyContent:"space-between",
+    alignItems: "center",
+    gap: 12,
+    backgroundColor: CARD,
+    borderWidth: 1,
+    borderColor: BORDER,
+    borderRadius: 22,
+    padding: 14,
+},
+
+
   chevText: { color: MUTED, fontSize: 22, marginTop: -2 },
 
   actionsRow: { flexDirection: "row", gap: 12, marginTop: 10 },

@@ -14,10 +14,11 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { styles, MUTED, GREEN } from "./styles";
 import { getUserData } from "@/src/storage/authStorage";
-import { User } from "@/src/api/auth";
 import { createOwnedGameBdd } from "@/src/api/ownedGames";
 import { GameBdd, OwnedGameCreatePayload } from "@/src/models/game-model";
 import { getAllGamesBdd } from "@/src/api/games";
+import { UserModel } from "@/src/models/user-model";
+import BasicHeader from "@/src/components/basicHeader/basicHeader";
 
 // Esto en realidad es “crear mi copia (OwnedGame)”
 type GameOption = { id: number; name: string };
@@ -33,7 +34,7 @@ export default function CreateOwnedGameScreen() {
   const [maxRentDays, setMaxRentDays] = useState("7");
   const [isActiveToRent, setisActiveToRent] = useState(true);
   const [isActiveToChange, setisActiveToChange] = useState(true);
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<UserModel | null>(null);
   
   const twoCols = width >= 420;
 
@@ -59,7 +60,7 @@ export default function CreateOwnedGameScreen() {
     let mounted = true;
 
     (async () => {
-      const u = await getUserData<User>();
+      const u = await getUserData<UserModel>();
       if (mounted) setUser(u);
     })();
     return () => {
@@ -109,15 +110,14 @@ export default function CreateOwnedGameScreen() {
 
 
   return (
-    <View style={[styles.screen, { paddingTop: insets.top }]}>
+    <View style={[styles.screen, { paddingTop: insets.top + 50 }]}>
       {/* Header */}
-      <View style={styles.header}>
-        <Pressable onPress={() => router.back()} hitSlop={10}>
-          <Text style={styles.back}>←</Text>
-        </Pressable>
-        <Text style={styles.title}>Añadir juego</Text>
-        <View style={{ width: 24 }} />
-      </View>
+
+    <BasicHeader
+    
+    headerText="AÑADIR JUEGO">
+
+    </BasicHeader>
 
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
         <View style={styles.card}>

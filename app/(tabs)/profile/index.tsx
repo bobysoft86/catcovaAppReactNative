@@ -9,6 +9,7 @@ import { getUserProfile /*, updateUserName */ } from "@/src/api/user";
 import { getUserData, removeLoginData, removeMatrixData, removeToken, removeUserData } from "@/src/storage/authStorage";
 import { UserModel } from "@/src/models/user-model";
 import { API_BASE_URL } from "@/src/config/api";
+import BasicHeader from "@/src/components/basicHeader/basicHeader";
 
 
 export default function ProfileScreen() {
@@ -72,17 +73,16 @@ export default function ProfileScreen() {
 
   return (
     <View style={[styles.screen, { paddingTop: insets.top + 50 }]}>
-      <View style={[styles.headerTop, { top: insets.top + 6 }]}>
-        <Pressable onPress={handleBack} style={styles.iconBtn} hitSlop={10}>
-          <Text style={styles.iconText}>←</Text>
-        </Pressable>
+     
+     <BasicHeader
+     headerText="PROFILE"
+     icon= "✎"
+      onRightPress={() => setEditOpen(true)}
+     ></BasicHeader>
+     
 
-        <Text style={styles.headerTitle}>PROFILE</Text>
 
-        <Pressable onPress={() => setEditOpen(true)} style={styles.iconBtn} hitSlop={10}>
-          <Text style={styles.iconText}>✎</Text>
-        </Pressable>
-      </View>
+
 
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         {/* Header */}
@@ -175,7 +175,7 @@ export default function ProfileScreen() {
 
     {/* Two small cards row */}
         <View style={styles.row}>
-          <Pressable onPress={() => router.push("/(noNabvar)/sharedGamesList")} style={styles.smallCard}>
+          <Pressable onPress={() => router.push("/(noNabvar)/players/create")} style={styles.smallCard}>
             <ImageBackground
                source={{
                 uri: "https://images.unsplash.com/photo-1751830580149-b8da67b571db?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",

@@ -3,11 +3,11 @@ import { View, Text, ScrollView, Pressable, Image, Alert } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router, useLocalSearchParams } from "expo-router";
 import { styles } from "./styles";
-import { User } from "@/src/api/auth";
 import { getUserData } from "@/src/storage/authStorage";
 import { GameBdd, OwnedGame } from "@/src/models/game-model";
 import { getOwnedGameById } from "@/src/api/ownedGames";
 import { createBooking } from "@/src/api/booking";
+import { UserModel } from "@/src/models/user-model";
 
 type Params = { id?: string; openingRules?: string };
 type OpeningRule = { weekday: string };
@@ -56,13 +56,13 @@ export default function ConfirmLoanScreen() {
   const [monthCursor, setMonthCursor] = useState(new Date());
   const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [endDate, setEndDate] = useState<Date | null>(new Date(Date.now() + 6 * 24 * 60 * 60 * 1000));
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<UserModel | null>(null);
   const [ownedGame,setOwnedGame] = useState<OwnedGame>();
 
   useEffect(() => {
         let mounted = true;
         (async () => {
-            const u = await getUserData<User>();
+            const u = await getUserData<UserModel>();
             if (mounted) setUser(u);
         })();
         return () => {

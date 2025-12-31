@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { styles, MUTED, GREEN } from "./styles";
 import { cancelBooking, confirmBooking, getBookingsToConfirm } from "@/src/api/booking";
 import { Image } from "react-native";
+import BasicHeader from "@/src/components/basicHeader/basicHeader";
 
 type BookingItem = {
   id: number;
@@ -105,18 +106,16 @@ export default function PendingLoanRequestScreen() {
   };
 
   return (
-    <View style={[styles.screen, { paddingTop: insets.top }]}>
+    <View style={[styles.screen, { paddingTop: insets.top +50 }]}>
+      <BasicHeader
+      headerText="SOLICITUDES"
+      icon="SYNC"
+      ></BasicHeader>
       <ScrollView
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={loadData} tintColor={GREEN} />}
         contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 20 }]}
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.header}>
-          <Text style={styles.h1}>Solicitudes</Text>
-          <Pressable style={styles.bell} onPress={() => loadData()}>
-            <Text style={styles.bellText}>SYNC</Text>
-          </Pressable>
-        </View>
 
         <View style={styles.search}>
           <Text style={{ color: MUTED }}>🔍</Text>

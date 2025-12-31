@@ -33,60 +33,60 @@ export default function HomeScreen() {
 
 
 
-useEffect(() => {
+    useEffect(() => {
 
-loadUserStaorageData()
+        loadUserStaorageData()
 
-  if (!user?.id) return;
-  let mounted = true;
+        if (!user?.id) return;
+        let mounted = true;
 
-  (async () => {
-    try {
-      const res = await getUserPlayersAndOrganizations(user.id);
+        (async () => {
+            try {
+                const res = await getUserPlayersAndOrganizations(user.id);
 
-      const rawList: UserTypeItem[] = res?.result ?? [];
+                const rawList: UserTypeItem[] = res?.result ?? [];
 
-      const list: UserTypeItem[] = rawList.map((item, index) => ({
-        ...item,
-        originalId: item.id,   // 👈 id real del backend
-        id: index + 1,         // 👈 id consecutivo para la UI
-      }));
+                const list: UserTypeItem[] = rawList.map((item, index) => ({
+                    ...item,
+                    originalId: item.id,   // 👈 id real del backend
+                    id: index + 1,         // 👈 id consecutivo para la UI
+                }));
 
-      if (!mounted) return;
+                if (!mounted) return;
 
-      setUserTypesList(list);
+                setUserTypesList(list);
 
-      if (list.length && userTypeSelected === null) {
-        const firstUserEnter = list.find((x) => x.type === "USER");
-        if (!firstUserEnter) return;
+                if (list.length && userTypeSelected === null) {
+                    const firstUserEnter = list.find((x) => x.type === "USER");
+                    if (!firstUserEnter) return;
 
-        setUserType(firstUserEnter);
+                    setUserType(firstUserEnter);
 
-        try {
-          await AsyncStorage.setItem(
-            USER_TYPE_SELECTED_KEY,
-            JSON.stringify(firstUserEnter)
-          );
-        } catch (e) {
-          console.error("Error guardando UserTypeSelected", e);
-        }
-      }
-    } catch (error) {
-      console.error("Error fetching user types:", error);
-    }
-  })();
+                    try {
+                        await AsyncStorage.setItem(
+                            USER_TYPE_SELECTED_KEY,
+                            JSON.stringify(firstUserEnter)
+                        );
+                    } catch (e) {
+                        console.error("Error guardando UserTypeSelected", e);
+                    }
+                }
+            } catch (error) {
+                console.error("Error fetching user types:", error);
+            }
+        })();
 
-  return () => {
-    mounted = false;
-  };
-}, [user?.id]);
-
-
+        return () => {
+            mounted = false;
+        };
+    }, [user?.id]);
 
 
-function loadUserStaorageData(){
 
-            let mounted = true;
+
+    function loadUserStaorageData() {
+
+        let mounted = true;
         (async () => {
             const u = await getUserData<UserModel>();
             if (mounted) setUser(u);
@@ -101,7 +101,7 @@ function loadUserStaorageData(){
         return () => {
             mounted = false;
         };
-}
+    }
 
 
 
@@ -118,8 +118,10 @@ function loadUserStaorageData(){
 
 
                 {isPlayer == true && <PlayerContent />}
-             
-                {isUser == true && <UserContent />}
+
+                {isUser == true && <UserContent
+                    userTypeSelected={userTypeSelected}
+                />}
                 {isOrg == true && <OrgContent userTypeSelected={userTypeSelected} />}
 
             </ScrollView>
@@ -158,7 +160,7 @@ function Header({
     onProfile,
 }: {
     userTypeLabel: string;
-    userTypeAvatar:string,
+    userTypeAvatar: string,
     onSelectType: () => void;
     onProfile: () => void;
 }) {
@@ -181,13 +183,41 @@ function Header({
                 </View>
             </Pressable>
             <Pressable onPress={onProfile} style={styles.headerRow}>
-                <Text style={styles.h1}> 🕵🏻‍♂️</Text>
+
             </Pressable>
         </View>
     );
 }
 
-function UserContent() {
+function UserContent({ userTypeSelected }: { userTypeSelected: UserTypeItem }) {
+
+    function getDiffMatchesPlayed(userData: UserTypeItem) {
+        const prev = Number(userData.matchesPlayedlastMonth ?? 0);
+        const curr = Number(userData.matchesPlayed ?? 0);
+        const result = curr - prev;
+
+        if (result > 0) return `+ ${result}`;
+        if (result < 0) return `- ${Math.abs(result)}`;
+        return "0";
+    }
+
+    function setMatechesPlayedGraph(userData: UserTypeItem) {
+        const prev = Number(userData.matchesPlayedlastMonth ?? 0);
+        const curr = Number(userData.matchesPlayed ?? 0);
+        
+        if (!Number.isFinite(prev) || !Number.isFinite(curr)) return 0;
+        console.log(curr)
+        if (prev <= 0) return curr > 0 ? 3 : 0;
+        
+        const pct = ((curr - prev) / prev) * 100;
+        console.log(pct)
+        if (pct <= 0) return 0;
+        if (pct <= 25) return 1;
+        if (pct <= 50) return 2;
+        return 3;
+    }
+
+    const graphLevel = setMatechesPlayedGraph(userTypeSelected);
     return (
         <>
             <LinearGradient
@@ -199,11 +229,9 @@ function UserContent() {
                 <View style={{ flex: 1 }}>
                     <Text style={styles.statsTitle}>PARTIDAS ESTE MES</Text>
                     <View style={styles.statsRow}>
-                        <Text style={styles.statsNumber}>12</Text>
+                        <Text style={styles.statsNumber}>{ userTypeSelected.matchesPlayed}</Text>
                         <View style={styles.delta}>
-                            <Text style={styles.deltaText}>↗ +10</Text>                              
-
-
+                            <Text style={styles.deltaText}> {getDiffMatchesPlayed(userTypeSelected)}</Text>
                         </View>
                     </View>
                 </View>
@@ -214,7 +242,7 @@ function UserContent() {
                             key={i}
                             style={[
                                 styles.bar,
-                                { height: h, backgroundColor: i === 3 ? GREEN : "rgba(34,197,94,0.25)" },
+                                { height: h, backgroundColor: i <= graphLevel ? GREEN : "rgba(34,197,94,0.25)" },
                             ]}
                         />
                     ))}
@@ -240,12 +268,21 @@ function UserContent() {
                         <Pressable onPress={() => router.push("/(tabs)/games")} style={styles.heroLink}>
                             <Text style={styles.heroLinkText}>Ver colección</Text>
                             <Text style={styles.heroLinkArrow}>→</Text>
-                            
+
                         </Pressable>
                     </LinearGradient>
                 </ImageBackground>
             </View>
 
+      <Pressable onPress={() => router.push("/(noNabvar)/matchCreate")}>
+
+                <View style={styles.basicCard}>
+                    <Text style={styles.loanTitle}>Registrar Partida</Text>
+                    <View style={styles.chev}>
+                        <Text style={styles.chevText}>›</Text>
+                    </View>
+                </View>
+            </Pressable>
             <View style={styles.sectionHeader}>
                 <Text style={styles.sectionTitle}>Préstamos activos</Text>
                 <Pressable onPress={() => router.push("/(noNabvar)/returnGamesList")}>
@@ -272,17 +309,9 @@ function UserContent() {
                 </View>
             </View>
 
-             
-             <Pressable onPress={()=> router.push("/(noNabvar)/matchCreate")}>    
 
-                <View style={styles.loanCard}>
-                    <Text style={styles.loanTitle}>Registrar Partida</Text>
-               <View style={styles.chev}>
-                    <Text style={styles.chevText}>›</Text>
-                </View>
-            </View>
-             </Pressable>
       
+
 
 
             <View style={styles.actionsRow}>
@@ -313,31 +342,31 @@ function UserContent() {
 function OrgContent({ userTypeSelected }: { userTypeSelected: UserTypeItem | null }) {
 
     return (
-          <View style={{ height: 40 }} >
+        <View style={{ height: 40 }} >
 
             <View style={styles.actionsRow}>
-            
-{userTypeSelected?.role === "OWNER" &&(
-            <Pressable
-                    onPress={() => router.navigate("/(noNabvar)/addOwnedGameToOrganization")}
-                    style={[styles.actionBig, styles.actionAdd]}
-                >
-                    <View style={styles.actionIcon}>
-                        <Text style={styles.actionIconText}>＋</Text>
-                    </View>
-                    <Text style={styles.actionText}>Incluir juego a organizacion</Text>
-                </Pressable>
-)}
 
-                <Pressable onPress={() =>router.push(`/organization/organizationGamesList?id=${userTypeSelected?.originalId}`)} style={[styles.actionBig, styles.actionScan]}>
+                {userTypeSelected?.role === "OWNER" && (
+                    <Pressable
+                        onPress={() => router.navigate("/(noNabvar)/addOwnedGameToOrganization")}
+                        style={[styles.actionBig, styles.actionAdd]}
+                    >
+                        <View style={styles.actionIcon}>
+                            <Text style={styles.actionIconText}>＋</Text>
+                        </View>
+                        <Text style={styles.actionText}>Incluir juego a organizacion</Text>
+                    </Pressable>
+                )}
+
+                <Pressable onPress={() => router.push(`/organization/organizationGamesList?id=${userTypeSelected?.originalId}`)} style={[styles.actionBig, styles.actionScan]}>
                     <View style={[styles.actionIcon, styles.actionIconDark]}>
                         <Text style={[styles.actionIconText, { color: TEXT }]}>📚</Text>
                     </View>
                     <Text style={[styles.actionText, { color: TEXT }]}>ver juegos en organizacion</Text>
                 </Pressable>
-                
+
             </View>
-{/* 
+            {/* 
                       <View style={styles.actionsRow}>
                 <Pressable
                     onPress={() => router.navigate("/(noNabvar)/games/createOwnGame")}
@@ -358,41 +387,41 @@ function OrgContent({ userTypeSelected }: { userTypeSelected: UserTypeItem | nul
                 
             </View> */}
 
-         </View>
+        </View>
     );
 }
 
 
-function PlayerContent(){
-     return (
-                   <LinearGradient
-                colors={["rgba(255,255,255,0.08)", "rgba(255,255,255,0.03)"]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={styles.statsCard}
-            >
-                <View style={{ flex: 1 }}>
-                    <Text style={styles.statsTitle}>PARTIDAS ESTE MES</Text>
-                    <View style={styles.statsRow}>
-                        <Text style={styles.statsNumber}>12</Text>
-                        <View style={styles.delta}>
-                            <Text style={styles.deltaText}>↗ +3</Text>
-                        </View>
+function PlayerContent() {
+    return (
+        <LinearGradient
+            colors={["rgba(255,255,255,0.08)", "rgba(255,255,255,0.03)"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.statsCard}
+        >
+            <View style={{ flex: 1 }}>
+                <Text style={styles.statsTitle}>PARTIDAS ESTE MES</Text>
+                <View style={styles.statsRow}>
+                    <Text style={styles.statsNumber}>12</Text>
+                    <View style={styles.delta}>
+                        <Text style={styles.deltaText}>↗ +3</Text>
                     </View>
                 </View>
+            </View>
 
-                <View style={styles.bars}>
-                    {[10, 16, 12, 22].map((h, i) => (
-                        <View
-                            key={i}
-                            style={[
-                                styles.bar,
-                                { height: h, backgroundColor: i === 3 ? GREEN : "rgba(34,197,94,0.25)" },
-                            ]}
-                        />
-                    ))}
-                </View>
-            </LinearGradient>
+            <View style={styles.bars}>
+                {[10, 16, 12, 22].map((h, i) => (
+                    <View
+                        key={i}
+                        style={[
+                            styles.bar,
+                            { height: h, backgroundColor: i === 3 ? GREEN : "rgba(34,197,94,0.25)" },
+                        ]}
+                    />
+                ))}
+            </View>
+        </LinearGradient>
 
     );
 }

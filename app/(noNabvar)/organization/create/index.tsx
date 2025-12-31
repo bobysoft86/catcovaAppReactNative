@@ -4,8 +4,9 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { styles, MUTED } from "./styles";
 import { createOrganization } from "@/src/api/organization";
-import { User } from "@/src/api/auth";
+
 import { getUserData } from "@/src/storage/authStorage";
+import BasicHeader from "@/src/components/basicHeader/basicHeader";
 
 
 
@@ -123,12 +124,19 @@ export default function CreateOrganizationScreen() {
   }
 
   return (
+
+<View>
+
+  <BasicHeader
+    headerText="CREAR ORGANIZACION"
+    icon = "+"
+          ></BasicHeader>
+
     <ScrollView
-      style={[styles.screen, { paddingTop: insets.top }]}
+      style={[styles.screen, { paddingTop: insets.top + 50 }]}
       contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 16 }]}
       keyboardShouldPersistTaps="handled"
     >
-      <Text style={styles.title}>Crear organización</Text>
 
       {/* Card: datos básicos */}
       <View style={styles.card}>
@@ -259,5 +267,7 @@ export default function CreateOrganizationScreen() {
         <Text style={styles.buttonText}>{loading ? "Creando..." : "Crear organización"}</Text>
       </Pressable>
     </ScrollView>
+</View>
+
   );
 }
