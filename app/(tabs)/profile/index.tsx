@@ -173,6 +173,118 @@ export default function ProfileScreen() {
           </Pressable>
         </View>
 
+    {/* Two small cards row */}
+        <View style={styles.row}>
+          <Pressable onPress={() => router.push("/(noNabvar)/sharedGamesList")} style={styles.smallCard}>
+            <ImageBackground
+               source={{
+                uri: "https://images.unsplash.com/photo-1751830580149-b8da67b571db?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+              }}
+              style={styles.smallBg}
+              imageStyle={styles.smallImg}
+            >
+              <LinearGradient colors={["rgba(0,0,0,0.0)", "rgba(0,0,0,0.72)"]} style={styles.smallOverlay}>
+                <View style={styles.smallIconPill}>
+                  <Text style={styles.smallIcon}>icon</Text>
+                </View>
+                <Text style={styles.smallTitle}>Crear Jugador</Text>
+              <Text style={styles.smallSub}>{String(wishedGamesCount)}</Text>
+              </LinearGradient>
+            </ImageBackground>
+          </Pressable>
+
+          <Pressable onPress={() => router.push("/(noNabvar)/organization/create")} style={styles.smallCard}>
+            <View style={styles.smallPlain}>
+              <View style={styles.smallIconPill}>
+                <Text style={styles.smallIcon}>icon</Text>
+              </View>
+              <Text style={styles.smallTitle}>Crear Organizacion</Text>
+              <Text style={styles.smallSub}>{String(wishedGamesCount)}</Text>
+            </View>
+          </Pressable>
+        </View>
+
+  {/* Two small cards row */}
+        <View style={styles.row}>
+          <Pressable onPress={() => router.push("/(noNabvar)/pendingLoanRequest")} style={styles.smallCard}>
+            <ImageBackground
+              source={
+              require("../../../assets/backgroundImages/player.jpg")
+              }
+              style={styles.smallBg}
+              imageStyle={styles.smallImg}
+            >
+              <LinearGradient colors={["rgba(0,0,0,0.0)", "rgba(0,0,0,0.72)"]} style={styles.smallOverlay}>
+                <View style={styles.smallIconPill}>
+                  <Text style={styles.smallIcon}>icon</Text>
+                </View>
+                <Text style={styles.smallTitle}>Pendiente de confirmacion</Text>
+              <Text style={styles.smallSub}>{String(wishedGamesCount)}</Text>
+              </LinearGradient>
+            </ImageBackground>
+          </Pressable>
+
+          <Pressable onPress={() => router.push("/(noNabvar)/returnGamesList")} style={styles.smallCard}>
+         <ImageBackground
+             source={
+              require("../../../assets/backgroundImages/sharedGames.jpg")
+              }
+              style={styles.smallBg}
+              imageStyle={styles.smallImg}
+            >
+              <LinearGradient colors={["rgba(0,0,0,0.0)", "rgba(0,0,0,0.72)"]} style={styles.smallOverlay}>
+                <View style={styles.smallIconPill}>
+                  <Text style={styles.smallIcon}>icon</Text>
+                </View>
+                <Text style={styles.smallTitle}>Devoluciones</Text>
+              <Text style={styles.smallSub}>{String(wishedGamesCount)}</Text>
+              </LinearGradient>
+            </ImageBackground>
+          </Pressable>
+        </View>
+
+
+
+{/* Two small cards row */}
+        <View style={styles.row}>
+          <Pressable onPress={() => router.push("/(noNabvar)/pendingDeliveries") } style={styles.smallCard}>
+            <ImageBackground
+              source={{
+                uri: "",
+              }}
+              style={styles.smallBg}
+              imageStyle={styles.smallImg}
+            >
+              <LinearGradient colors={["rgba(0,0,0,0.0)", "rgba(0,0,0,0.72)"]} style={styles.smallOverlay}>
+                <View style={styles.smallIconPill}>
+                  <Text style={styles.smallIcon}>icon</Text>
+                </View>
+                <Text style={styles.smallTitle}>Entregas</Text>
+              <Text style={styles.smallSub}>{String(wishedGamesCount)}</Text>
+              </LinearGradient>
+            </ImageBackground>
+          </Pressable>
+
+          <Pressable onPress={() =>router.push("/(noNabvar)/matchesList") } style={styles.smallCard}>
+         <ImageBackground
+              source={{
+                uri: "",
+              }}
+              style={styles.smallBg}
+              imageStyle={styles.smallImg}
+            >
+            <View style={styles.smallPlain}>
+              <View style={styles.smallIconPill}>
+                <Text style={styles.smallIcon}>icon</Text>
+              </View>
+              <Text style={styles.smallTitle}>Partidas</Text>
+              <Text style={styles.smallSub}>{String(wishedGamesCount)}</Text>
+            </View>
+            </ImageBackground>
+          </Pressable>
+        </View>
+
+
         {/* Settings row card */}
         <Pressable onPress={() => console.log("Config")} style={styles.settingsCard}>
           <View style={styles.settingsLeft}>
@@ -186,78 +298,6 @@ export default function ProfileScreen() {
           </View>
           <Text style={styles.chev}>›</Text>
         </Pressable>
-
-           <Pressable onPress={() => router.push("/(noNabvar)/players/create") }style={styles.settingsCard}>
-          <View style={styles.settingsLeft}>
-            <View style={styles.settingsIcon}>
-            </View>
-            <View>
-              <Text style={styles.settingsTitle}>Crear Jugador</Text>
-            </View>
-          </View>
-          <Text style={styles.chev}>›</Text>
-        </Pressable>
-
-          <Pressable onPress={() => router.push("/(noNabvar)/organization/create") }style={styles.settingsCard}>
-          <View style={styles.settingsLeft}>
-            <View style={styles.settingsIcon}>
-            </View>
-            <View>
-              <Text style={styles.settingsTitle}>Crear Organizacion</Text>
-            </View>
-          </View>
-          <Text style={styles.chev}>›</Text>
-        </Pressable>
-
-
-
-          <Pressable onPress={() => router.push("/(noNabvar)/pendingLoanRequest") }style={styles.settingsCard}>
-          <View style={styles.settingsLeft}>
-            <View style={styles.settingsIcon}>
-            </View>
-            <View>
-              <Text style={styles.settingsTitle}>Cesiones pendientes de confirmacion</Text>
-            </View>
-          </View>
-          <Text style={styles.chev}>›</Text>
-        </Pressable>
-
-        <Pressable onPress={() => router.push("/(noNabvar)/returnGamesList") }style={styles.settingsCard}>
-          <View style={styles.settingsLeft}>
-            <View style={styles.settingsIcon}>
-            </View>
-            <View>
-              <Text style={styles.settingsTitle}>Devoluciones</Text>
-            </View>
-          </View>
-          <Text style={styles.chev}>›</Text>
-        </Pressable>
-
-                 <Pressable onPress={() => router.push("/(noNabvar)/pendingDeliveries") }style={styles.settingsCard}>
-          <View style={styles.settingsLeft}>
-            <View style={styles.settingsIcon}>
-            </View>
-            <View>
-              <Text style={styles.settingsTitle}>Entregas</Text>
-            </View>
-          </View>
-          <Text style={styles.chev}>›</Text>
-        </Pressable>
-
-
-                 <Pressable onPress={() => router.push("/(noNabvar)/matchesList") }style={styles.settingsCard}>
-          <View style={styles.settingsLeft}>
-            <View style={styles.settingsIcon}>
-            </View>
-            <View>
-              <Text style={styles.settingsTitle}>Partidas Registradas</Text>
-            </View>
-          </View>
-          <Text style={styles.chev}>›</Text>
-        </Pressable>
-
-
-
 
         {/* Logout */}
         <Pressable onPress={onLogout} style={styles.logout}>

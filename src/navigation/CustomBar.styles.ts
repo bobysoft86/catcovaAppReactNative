@@ -49,6 +49,15 @@ export const styles = StyleSheet.create({
   text: {
     color: colors.text,
   },
+
+  textActive: {
+    color: BG,
+
+  },
+  textInactive: {
+    color:INACTIVE
+  },
+  
   dot: {
     width: 18,
     height: 18,

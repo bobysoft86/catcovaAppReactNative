@@ -37,7 +37,6 @@ useEffect(() => {
 
 loadUserStaorageData()
 
-
   if (!user?.id) return;
   let mounted = true;
 
