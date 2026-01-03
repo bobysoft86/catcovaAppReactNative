@@ -3,22 +3,23 @@ import { View, Text, ScrollView, TextInput, Pressable, Alert } from "react-nativ
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { getUserData } from "@/src/storage/authStorage";
-import { User } from "@/src/api/auth";
+
 
 import { styles, MUTED } from "./styles";
 import { createPlayer } from "@/src/api/player";
 import BasicHeader from "@/src/components/basicHeader/basicHeader";
+import { UserModel } from "@/src/models/user-model";
 
 export default function CreatePlayerScreen() {
   const insets = useSafeAreaInsets();
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<UserModel | null>(null);
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     let mounted = true;
     (async () => {
-      const u = await getUserData<User>();
+      const u = await getUserData<UserModel>();
       if (mounted) setUser(u);
     })();
     return () => {

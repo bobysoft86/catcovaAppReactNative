@@ -35,11 +35,11 @@ api.interceptors.response.use(
     const cfg = error.config || {};
     const fullUrl = `${cfg.baseURL ?? ""}${cfg.url ?? ""}`;
 
-    // console.log("❌ AXIOS ERROR:", error.message);
-    // console.log("   URL:", fullUrl);
-    // console.log("   METHOD:", (cfg.method || "GET").toUpperCase());
-    // console.log("   TIMEOUT:", cfg.timeout);
-    // console.log("   HAS_TOKEN:", !!cfg.headers?.Authorization);
+    console.log("❌ AXIOS ERROR:", error.message);
+    console.log("   URL:", fullUrl);
+    console.log("   METHOD:", (cfg.method || "GET").toUpperCase());
+    console.log("   TIMEOUT:", cfg.timeout);
+    console.log("   HAS_TOKEN:", !!cfg.headers?.Authorization);
 
     return Promise.reject(error);
   }

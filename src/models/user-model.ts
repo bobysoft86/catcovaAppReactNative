@@ -5,6 +5,7 @@ export interface UserModel {
   email: string;
   role: string;
   matrixId?:string;
+  createdAt:string
   avatar: string
 }
 

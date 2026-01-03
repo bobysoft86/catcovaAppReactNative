@@ -97,11 +97,11 @@ export default function ProfileScreen() {
           </View>
 
           <Text style={styles.name}>{displayName}</Text>
-          <Text style={styles.handle}>@alexplays</Text>
+          <Text style={styles.handle}>@{displayName}</Text>
 
           <View style={styles.memberRow}>
             <Text style={styles.memberIcon}>📅</Text>
-            <Text style={styles.memberText}>Miembro desde 2023</Text>
+            <Text style={styles.memberText}>Miembro desde {user?.createdAt}</Text>
           </View>
 
           {/* Stats */}
